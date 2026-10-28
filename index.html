@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Eventum Horas</title>
+<meta name="description" content="Marcación de entrada y salida del equipo Eventum.">
+<meta name="theme-color" content="#0b0a14">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Eventum Horas">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+  :root { --bg:#0b0a14; --fg:#f5f3fb; --muted:#aaa4c4; --o1:#ee4b22; --o2:#f07022; --amber:#f39c1f; --p1:#5b3e99; --p2:#9d87c0; color-scheme: dark; }
+  html, body { margin:0; height:100%; background:var(--bg); color:var(--fg); font:16px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; overflow:hidden; }
+  #app { position:fixed; inset:0; width:100%; height:100%; border:0; background:var(--bg);
+         padding-top:env(safe-area-inset-top,0px); box-sizing:border-box; opacity:0; transition:opacity .5s ease; }
+  #app.listo { opacity:1; }
+  #splash { position:fixed; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:26px;
+            background:radial-gradient(90% 60% at 30% 10%, rgba(238,75,34,.35), transparent 60%),
+                       radial-gradient(90% 60% at 80% 90%, rgba(91,62,153,.5), transparent 60%), var(--bg);
+            transition:opacity .5s ease; z-index:2; padding:24px; text-align:center; }
+  #splash.fuera { opacity:0; pointer-events:none; }
+  #splash img { width:120px; height:120px; border-radius:28px; animation:respira 2.4s ease-in-out infinite; }
+  .barra { width:min(60vw,240px); height:6px; border-radius:99px; background:rgba(255,255,255,.12); overflow:hidden; }
+  .barra i { display:block; height:100%; width:40%; border-radius:99px; background:linear-gradient(90deg,var(--o1),var(--amber),var(--p2)); animation:corre 1.3s ease-in-out infinite; }
+  .marca { font:800 30px/1.1 system-ui, sans-serif; letter-spacing:.18em; }
+  .marca small { display:block; font:500 14px system-ui, sans-serif; letter-spacing:.08em; color:var(--muted); margin-top:6px; }
+  #splash p { margin:0; color:var(--muted); font-size:14px; }
+  #lento { display:none; }
+  #lento button, #instalar { font:600 15px system-ui, sans-serif; color:#fff; border:0; border-radius:14px; padding:12px 18px;
+            background:linear-gradient(135deg,var(--o1),var(--o2)); box-shadow:0 8px 24px rgba(238,75,34,.35); cursor:pointer; }
+  @keyframes respira { 50% { transform:scale(1.04); filter:drop-shadow(0 0 22px rgba(240,112,34,.45)); } }
+  @keyframes corre { 0% { transform:translateX(-110%); } 100% { transform:translateX(260%); } }
+  /* Aviso para instalar */
+  #aviso { position:fixed; left:12px; right:12px; bottom:calc(12px + env(safe-area-inset-bottom,0px)); z-index:3;
+           background:rgba(28,24,52,.96); border:1px solid rgba(255,255,255,.14); border-radius:18px; padding:14px 16px;
+           display:none; gap:12px; align-items:center; box-shadow:0 12px 40px rgba(0,0,0,.5); }
+  #aviso.ver { display:flex; }
+  #aviso img { width:44px; height:44px; border-radius:11px; flex:0 0 auto; }
+  #aviso div { flex:1; font-size:14px; color:var(--muted); }
+  #aviso b { color:var(--fg); display:block; font-size:15px; }
+  #cerrar { background:none; border:0; color:var(--muted); font-size:22px; cursor:pointer; padding:4px 6px; }
+  @media (prefers-reduced-motion: reduce) { * { animation:none !important; transition:none !important; } }
+</style>
+</head>
+<body>
+  <div id="splash" role="status" aria-live="polite">
+    <img src="icon-192.png" alt=""><div class="marca">EVENTUM<small>Control de Horas</small></div>
+    <div class="barra" aria-hidden="true"><i></i></div>
+    <p id="msg">Cargando control de horas…</p>
+    <div id="lento"><button type="button" id="reintentar">Volver a intentar</button></div>
+  </div>
+
+  <iframe id="app" title="Eventum · Control de Horas"
+          allow="geolocation *; camera *; clipboard-write *"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+  <div id="aviso" role="dialog" aria-label="Instalar la app">
+    <img src="icon-192.png" alt="">
+    <div id="avisoTxt"></div>
+    <button type="button" id="instalar" hidden>Instalar</button>
+    <button type="button" id="cerrar" aria-label="Cerrar">&times;</button>
+  </div>
+
+<script>
+  // Dirección de la app de Google (la misma que usa todo el equipo)
+  var APP_URL = 'https://script.google.com/macros/s/AKfycbyipUDT9rYIrbMsW1Nbu5XjPD3PN3Gh1dEb5dN-wffnSKhjNc9l93lkKlfJ8MPA-MNJ/exec';
+
+  var frame = document.getElementById('app');
+  var splash = document.getElementById('splash');
+  var cargas = 0, temporizador;
+
+  function abrir() {
+    document.getElementById('lento').style.display = 'none';
+    document.getElementById('msg').textContent = 'Cargando control de horas…';
+    splash.classList.remove('fuera'); frame.classList.remove('listo');
+    clearTimeout(temporizador);
+    temporizador = setTimeout(function () {
+      document.getElementById('msg').textContent = 'Está tardando más de lo normal. Revisa tu conexión.';
+      document.getElementById('lento').style.display = 'block';
+    }, 25000);
+    frame.src = APP_URL + (APP_URL.indexOf('?') < 0 ? '?' : '&') + 'v=' + Date.now();
+  }
+  frame.addEventListener('load', function () {
+    cargas++;
+    clearTimeout(temporizador);
+    // Google arma la app en dos pasos; damos un momento para que pinte.
+    setTimeout(function () { frame.classList.add('listo'); splash.classList.add('fuera'); }, 1200);
+  });
+  document.getElementById('reintentar').onclick = abrir;
+  abrir();
+
+  // Registro del service worker (permite instalar y abrir rápido)
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
+  }
+
+  // Aviso de instalación
+  var instalada = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  var esIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var aviso = document.getElementById('aviso'), txt = document.getElementById('avisoTxt'), btn = document.getElementById('instalar');
+  var cerrado = false;
+  try { cerrado = localStorage.getItem('avisoCerrado') === '1'; } catch (e) {}
+  document.getElementById('cerrar').onclick = function () { aviso.classList.remove('ver'); try { localStorage.setItem('avisoCerrado', '1'); } catch (e) {} };
+
+  if (!instalada && !cerrado) {
+    if (esIOS) {
+      txt.innerHTML = '<b>Instala Eventum Horas</b>Toca <b style="display:inline">Compartir</b> (el cuadro con la flecha) y luego <b style="display:inline">“Agregar a inicio”</b>.';
+      setTimeout(function () { aviso.classList.add('ver'); }, 4000);
+    } else {
+      var evento = null;
+      window.addEventListener('beforeinstallprompt', function (e) {
+        e.preventDefault(); evento = e;
+        txt.innerHTML = '<b>Instala Eventum Horas</b>Tenla en tu pantalla de inicio como una app.';
+        btn.hidden = false; aviso.classList.add('ver');
+      });
+      btn.onclick = function () {
+        if (!evento) return;
+        evento.prompt();
+        evento.userChoice.finally(function () { evento = null; aviso.classList.remove('ver'); });
+      };
+      // Si el navegador no ofrece el botón, damos la instrucción manual
+      setTimeout(function () {
+        if (!evento && !aviso.classList.contains('ver')) {
+          txt.innerHTML = '<b>Instala Eventum Horas</b>Abre el menú ⋮ del navegador y elige <b style="display:inline">“Instalar app”</b> o <b style="display:inline">“Agregar a pantalla principal”</b>.';
+          aviso.classList.add('ver');
+        }
+      }, 6000);
+    }
+  }
+</script>
+</body>
+</html>
