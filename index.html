@@ -88,8 +88,8 @@
   frame.addEventListener('load', function () {
     cargas++;
     clearTimeout(temporizador);
-    // Google arma la app en dos pasos; damos un momento para que pinte.
-    setTimeout(function () { frame.classList.add('listo'); splash.classList.add('fuera'); }, 1200);
+    // Google arma la app en varios pasos; mantenemos la pantalla de carga mientras pinta.
+    setTimeout(function () { frame.classList.add('listo'); splash.classList.add('fuera'); }, cargas === 1 ? 9000 : 1500);
   });
   document.getElementById('reintentar').onclick = abrir;
   abrir();
