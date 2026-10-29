@@ -72,12 +72,23 @@
 
   var frame = document.getElementById('app');
   var splash = document.getElementById('splash');
-  var cargas = 0, temporizador;
+  var cargas = 0, temporizador, mostrado = false;
+  // Muestra la app apenas avisa que está lista (en vez de esperar un tiempo fijo)
+  function mostrar() {
+    if (mostrado) return; mostrado = true;
+    clearTimeout(temporizador);
+    frame.classList.add('listo'); splash.classList.add('fuera');
+  }
+  window.addEventListener('message', function (ev) {
+    if (!/^https:\/\/[a-z0-9-]+\.googleusercontent\.com$/i.test(ev.origin)) return;
+    var t = ev.data && ev.data.tipo;
+    if (t === 'appLista' || t === 'offHola') setTimeout(mostrar, 120);
+  });
 
   function abrir() {
     document.getElementById('lento').style.display = 'none';
     document.getElementById('msg').textContent = 'Cargando control de horas…';
-    splash.classList.remove('fuera'); frame.classList.remove('listo');
+    mostrado = false; splash.classList.remove('fuera'); frame.classList.remove('listo');
     clearTimeout(temporizador);
     temporizador = setTimeout(function () {
       document.getElementById('msg').textContent = 'Está tardando más de lo normal. Revisa tu conexión.';
@@ -89,7 +100,8 @@
     cargas++;
     clearTimeout(temporizador);
     // Google arma la app en varios pasos; mantenemos la pantalla de carga mientras pinta.
-    setTimeout(function () { frame.classList.add('listo'); splash.classList.add('fuera'); }, cargas === 1 ? 9000 : 1500);
+    // Respaldo por si el aviso de "lista" no llega
+    setTimeout(mostrar, cargas === 1 ? 9000 : 1500);
   });
   document.getElementById('reintentar').onclick = abrir;
   abrir();
