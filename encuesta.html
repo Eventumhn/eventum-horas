@@ -169,7 +169,7 @@ return `<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="21" fill="none" stro
 }
 function answered(q){
 const v=A[q.id];
-if(q.type==="datos") return v&&v.evento&&v.empresa;
+if(q.type==="datos") return v&&v.evento&&v.empresa&&v.nombre;
 if(q.type==="matrix") return v&&q.rows.every(r=>v[r[0]]!=null);
 if(q.type==="chipsN") return v&&v.length;
 if(q.type==="text") return v&&v.trim();
@@ -198,8 +198,8 @@ if(q.type==="datos"){
 const v=A.datos||(A.datos={clave:EV.clave,evento:EV.titulo,ciudad:EV.ciudad==="SPS"?"San Pedro Sula":EV.ciudad==="TGU"?"Tegucigalpa":"",empresa:"",nombre:""});
 body=`${EV.titulo?`<div class="evbox"><span>Evento</span><b>${esc(EV.titulo)}</b></div>`:`<div class="field"><label for="d-evento">Nombre del evento</label><input type="text" id="d-evento" maxlength="150" placeholder="Ej. Lanzamiento de producto" value="${esc(v.evento)}"></div>`}
 <div class="grid2">
-<div class="field"><label for="d-emp">Empresa o marca</label><input type="text" id="d-emp" maxlength="120" placeholder="Ej. Banco Atlántida" value="${esc(v.empresa)}"></div>
-<div class="field"><label for="d-nom">Tu nombre <small>(opcional)</small></label><input type="text" id="d-nom" maxlength="120" value="${esc(v.nombre)}"></div>
+<div class="field"><label for="d-emp">Empresa o marca</label><input type="text" id="d-emp" maxlength="120" value="${esc(v.empresa)}"></div>
+<div class="field"><label for="d-nom">Tu nombre</label><input type="text" id="d-nom" maxlength="120" value="${esc(v.nombre)}"></div>
 ${EV.ciudad?"":`<div class="field"><label for="d-ciudad">Ciudad</label><select id="d-ciudad">${["Tegucigalpa","San Pedro Sula","Otra ciudad"].map(c=>`<option ${v.ciudad===c?"selected":""}>${c}</option>`).join("")}</select></div>`}</div>`;
 }
 if(q.type==="stars"){
