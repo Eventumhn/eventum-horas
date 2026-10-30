@@ -1,6 +1,6 @@
 // Guarda la pantalla de inicio para que la app abra rápido.
 // Los datos siempre vienen en vivo desde el servidor de Google.
-const CACHE = 'eventum-horas-v4';
+const CACHE = 'eventum-horas-v5';
 const ARCHIVOS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-maskable-512.png', './apple-touch-icon.png', './favicon.png', './sinconexion.js?v=2', './notificaciones.js?v=1'];
 
 self.addEventListener('install', e => {
@@ -28,8 +28,8 @@ self.addEventListener('fetch', e => {
 self.addEventListener('push', e => {
   let d = {};
   try { d = e.data ? e.data.json() : {}; } catch (x) { d = { body: e.data ? e.data.text() : '' }; }
-  e.waitUntil(self.registration.showNotification(d.title || 'Eventum Horas', {
-    body: d.body || 'Tienes una novedad en Eventum Horas.',
+  e.waitUntil(self.registration.showNotification(d.title || 'Eventum', {
+    body: d.body || 'Tienes una novedad en Eventum.',
     icon: 'icon-192.png', badge: 'favicon.png', tag: d.tag || 'eventum', renotify: true, data: { url: './' }
   }));
 });

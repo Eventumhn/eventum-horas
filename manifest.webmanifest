@@ -1,7 +1,7 @@
 {
-  "name": "Eventum · Control de Horas",
-  "short_name": "Eventum Horas",
-  "description": "Marcación de entrada y salida del equipo Eventum.",
+  "name": "Eventum",
+  "short_name": "Eventum",
+  "description": "La app del equipo Eventum: horas, eventos, viáticos y más.",
   "lang": "es",
   "start_url": "./",
   "scope": "./",
