@@ -1,7 +1,7 @@
 // Guarda la pantalla de inicio para que la app abra rápido.
 // Los datos siempre vienen en vivo desde el servidor de Google.
-const CACHE = 'eventum-horas-v6';
-const ARCHIVOS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-maskable-512.png', './apple-touch-icon.png', './favicon.png', './sinconexion.js?v=2', './notificaciones.js?v=1'];
+const CACHE = 'eventum-horas-v7';
+const ARCHIVOS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-maskable-512.png', './apple-touch-icon.png', './favicon.png', './logo-cubos.png', './sinconexion.js?v=2', './notificaciones.js?v=1'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ARCHIVOS)).then(() => self.skipWaiting()));
