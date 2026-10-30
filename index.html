@@ -109,6 +109,10 @@
     if (!/^https:\/\/[a-z0-9-]+\.googleusercontent\.com$/i.test(ev.origin)) return;
     var t = ev.data && ev.data.tipo;
     if (t === 'appLista' || t === 'offHola') setTimeout(mostrar, 120);
+    // Recordarme en este celular: se guarda en la app instalada (el navegador puede borrar lo que guarda la página de Google)
+    if (t === 'recUser' && ev.data.n && ev.data.p) { try { localStorage.setItem('ehRecUser', JSON.stringify({ n: ev.data.n, p: ev.data.p })); } catch (e) {} }
+    if (t === 'olvUser') { try { localStorage.removeItem('ehRecUser'); } catch (e) {} }
+    if (t === 'appLista') { try { var u = JSON.parse(localStorage.getItem('ehRecUser') || 'null'); if (u && u.n && u.p) ev.source.postMessage({ tipo: 'recUser', n: u.n, p: u.p }, ev.origin); } catch (e) {} }
   });
 
   var FRASES_C = ['Preparando tu app…', 'Cargando tus eventos…', 'Revisando tus horas…', 'Poniendo todo en orden…', 'Casi listo…'], fraseT;
