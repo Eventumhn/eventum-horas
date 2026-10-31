@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="theme-color" content="#0d0b17">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Encuesta de satisfacción · Eventum</title>
+<meta name="description" content="Cuéntanos cómo vivimos tu evento. Preguntas rápidas, solo tocar y listo.">
+<meta property="og:title" content="¿Cómo vivimos tu evento? · Eventum">
+<meta property="og:description" content="Su opinión nos ayuda a mejorar cada día. Preguntas rápidas, solo tocar y listo.">
+<meta property="og:image" content="https://eventumhn.github.io/eventum-horas/icon-192.png">
+<meta property="og:type" content="website">
+<link rel="icon" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400..800&family=Nunito+Sans:wght@400;600;700;800&display=swap">
+<style>
+:root{
+--stage:#0d0b17; --panel:#1b1630; --panel-2:#241d3d; --line:#342b55; --card:rgba(27,22,48,.8);
+--fg:#fbf8ff; --muted:#c9c1dd; --dim:#9a90b8; --accent:#ee4b22; --accent-2:#ff7a4d; --accent-ink:#ffffff;
+--purple:#7c5cd6; --lav:#b49cff; --gold:#f5a524; --green:#2fbf8f; --mint:#4fd6a3; --brick:#ff5a4d;
+--f-display:"Rubik",ui-sans-serif,system-ui,sans-serif;
+--f-body:"Nunito Sans",ui-sans-serif,system-ui,sans-serif;
+color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:var(--stage);color:var(--fg);font:16px/1.5 var(--f-body);overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+.aura{position:fixed;inset:-20%;z-index:0;pointer-events:none;background:radial-gradient(circle at 18% 14%,#4a1f22 0,transparent 36%),radial-gradient(circle at 84% 20%,#3b2a6e 0,transparent 40%),radial-gradient(circle at 50% 100%,#2a1a45 0,transparent 44%)}
+#lights{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.shell{position:relative;z-index:1;min-height:100%;max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:18px;
+padding-block:max(20px,env(safe-area-inset-top)) max(28px,env(safe-area-inset-bottom));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;font:800 23px var(--f-display);letter-spacing:-.01em;color:var(--fg)}
+.brand img{height:36px;width:auto;display:block;filter:drop-shadow(0 6px 14px rgba(238,75,34,.45))}
+.step-count{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;font-weight:800;letter-spacing:.06em;background:var(--panel);border:1px solid var(--line);padding:5px 12px;border-radius:99px}
+.step-count:empty{display:none}
+.bar{height:8px;border-radius:99px;background:#221b3a;overflow:hidden}
+.bar span{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--gold),var(--accent),var(--purple));transition:width .6s cubic-bezier(.2,.8,.2,1);position:relative;overflow:hidden;box-shadow:0 0 18px rgba(238,75,34,.6)}
+.bar span::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);transform:translateX(-100%)}
+.sections{display:flex;gap:6px;flex-wrap:wrap}
+.sections b{font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:5px 11px;border-radius:99px;border:1px solid var(--line);color:var(--dim);font-weight:800;transition:all .3s}
+.sections b.on{color:#fff;background:var(--accent);border-color:var(--accent);box-shadow:0 6px 18px -6px var(--accent)}
+.sections b.done{color:var(--mint);border-color:rgba(79,214,163,.4)}
+.sections b.done::before{content:"✓ "}
+main{flex:1;display:flex;flex-direction:column;justify-content:center}
+.card{position:relative;overflow:hidden;background:var(--card);border:1px solid var(--line);border-radius:28px;padding:clamp(22px,5vw,40px);
+box-shadow:0 30px 80px -30px rgba(0,0,0,.75),inset 0 1px 0 rgba(255,255,255,.05);
+backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);display:flex;flex-direction:column;gap:22px}
+.card::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:linear-gradient(90deg,var(--accent),var(--gold),var(--purple))}
+.eyebrow{font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:800}
+h1,h2{color:var(--fg);font-family:var(--f-display);margin:0;text-wrap:balance;letter-spacing:-.02em}
+h1{font-size:clamp(34px,8vw,54px);line-height:1.03;font-weight:800}
+h2{font-size:clamp(24px,5.4vw,34px);line-height:1.12;font-weight:700}
+.lead{color:var(--muted);margin:0;max-width:56ch;font-size:17px}
+.hint{font-size:14px;color:var(--dim);margin:-10px 0 0}
+.hero{width:96px;height:auto;filter:drop-shadow(0 14px 28px rgba(238,75,34,.5))}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pills b{font-size:13px;font-weight:700;color:var(--muted);background:var(--panel);border:1px solid var(--line);padding:7px 12px;border-radius:99px}
+/* Controles */
+button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.stars{display:flex;gap:8px;flex-wrap:wrap}
+.star{width:58px;height:58px;border-radius:18px;border:1px solid var(--line);background:var(--panel);display:grid;place-items:center;transition:transform .25s cubic-bezier(.3,1.6,.5,1),background .2s,box-shadow .2s}
+.star svg{width:30px;height:30px;fill:none;stroke:var(--dim);stroke-width:1.6}
+.star.on{background:rgba(245,165,36,.14);border-color:var(--gold);box-shadow:0 0 24px -4px rgba(245,165,36,.65)}
+.star.on svg{fill:var(--gold);stroke:var(--gold)}
+.star:hover{transform:translateY(-4px)}
+.star-label{font:800 20px var(--f-display);min-height:30px;color:var(--gold)}
+.faces{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.face{border:1px solid var(--line);background:var(--panel);border-radius:20px;padding:14px 4px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;transition:transform .25s cubic-bezier(.3,1.6,.5,1),background .2s,box-shadow .2s}
+.face svg{width:42px;height:42px;transition:transform .3s}
+.face small{font-size:12px;color:var(--dim);font-weight:700;text-align:center;line-height:1.2}
+.face:hover svg{transform:scale(1.12)}
+.face[aria-pressed="true"]{background:rgba(238,75,34,.15);border-color:var(--accent);transform:translateY(-6px);box-shadow:0 14px 30px -12px rgba(238,75,34,.75)}
+.face[aria-pressed="true"] small{color:var(--fg)}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{border:1px solid var(--line);background:var(--panel);color:var(--muted);border-radius:99px;padding:12px 18px;font-weight:700;transition:all .2s}
+.chip:hover{border-color:var(--accent-2);color:var(--fg)}
+.chip[aria-pressed="true"]{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;border-color:transparent;box-shadow:0 10px 24px -10px var(--accent)}
+.matrix{display:flex;flex-direction:column;gap:12px}
+.mrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 16px;align-items:center;padding:12px 14px;border-radius:16px;background:var(--panel);border:1px solid var(--line)}
+.mrow .lbl{font-weight:700}
+.mrow .lbl small{display:block;color:var(--dim);font-weight:600;font-size:13px}
+.dots{display:flex;gap:6px}
+.dot{width:36px;height:36px;border-radius:11px;border:1px solid var(--line);background:#14102a;font-weight:800;font-size:14px;font-variant-numeric:tabular-nums;color:var(--dim);transition:all .2s cubic-bezier(.3,1.6,.5,1)}
+.dot[aria-pressed="true"]{background:var(--accent);color:#fff;border-color:var(--accent);transform:scale(1.12);box-shadow:0 6px 16px -6px var(--accent)}
+.dot.na{width:auto;padding:0 10px;font-size:12px}
+.dot.na[aria-pressed="true"]{background:var(--purple);border-color:var(--purple);box-shadow:0 6px 16px -6px var(--purple)}
+@media (max-width:520px){.mrow{grid-template-columns:1fr}}
+.range-wrap{display:flex;flex-direction:column;gap:12px}
+.emo{font-size:58px;line-height:1;height:62px}
+.big{font:800 clamp(64px,16vw,104px)/1 var(--f-display);font-variant-numeric:tabular-nums;letter-spacing:-.04em;background:linear-gradient(120deg,var(--gold),var(--accent),var(--lav));-webkit-background-clip:text;background-clip:text;color:transparent}
+.big small{font-size:.32em;color:var(--dim);-webkit-text-fill-color:var(--dim)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:12px;margin:14px 0;border-radius:99px;outline:none;background:linear-gradient(90deg,var(--gold) 0,var(--accent) var(--p,70%),#2a2347 var(--p,70%))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:34px;height:34px;border-radius:50%;background:#fbf8ff;border:5px solid var(--accent);box-shadow:0 0 0 7px rgba(238,75,34,.25),0 8px 20px rgba(0,0,0,.45);cursor:grab}
+input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:#fbf8ff;border:5px solid var(--accent);box-shadow:0 0 0 7px rgba(238,75,34,.25);cursor:grab}
+.scale-ends{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--dim)}
+.nps{display:grid;grid-template-columns:repeat(11,1fr);gap:6px}
+.nps button{aspect-ratio:1/1.15;max-width:100%;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--muted);font:700 17px var(--f-display);font-variant-numeric:tabular-nums;transition:transform .25s cubic-bezier(.3,1.6,.5,1),background .2s}
+.nps button:hover{transform:translateY(-3px)}
+.nps button[aria-pressed="true"]{color:#fff;border-color:transparent;transform:scale(1.12)}
+.nps button.lo[aria-pressed="true"]{background:var(--brick);box-shadow:0 8px 20px -8px var(--brick)}
+.nps button.mid[aria-pressed="true"]{background:var(--gold);color:#1b1630;box-shadow:0 8px 20px -8px var(--gold)}
+.nps button.hi[aria-pressed="true"]{background:var(--green);box-shadow:0 8px 20px -8px var(--green)}
+@media (max-width:520px){.nps{grid-template-columns:repeat(6,1fr)}}
+textarea,select,input[type=text]{width:100%;font:600 16px var(--f-body);color:var(--fg);background:#14102a;border:1px solid var(--line);border-radius:14px;padding:14px;transition:border-color .2s,box-shadow .2s}
+textarea:focus,select:focus,input[type=text]:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px rgba(238,75,34,.18)}
+::placeholder{color:#7d739c}
+select option{background:#1b1630;color:var(--fg)}
+textarea{min-height:130px;resize:vertical}
+.field{display:flex;flex-direction:column;gap:8px}
+.field label{font-weight:700;font-size:14px;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px}
+nav.ctrl{display:flex;gap:10px;align-items:center}
+.btn{border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:16px;padding:15px 20px;font-weight:800;transition:transform .15s,box-shadow .2s,opacity .2s}
+.btn.primary{position:relative;overflow:hidden;flex:1;background:linear-gradient(135deg,var(--accent),var(--accent-2));border-color:transparent;color:#fff;font-size:17px;box-shadow:0 14px 34px -12px var(--accent)}
+.btn.primary::after{content:"";position:absolute;top:0;bottom:0;width:40%;left:-60%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-20deg)}
+.btn.primary:disabled{opacity:.3;box-shadow:none;cursor:default}
+.btn.primary:disabled::after{display:none}
+.btn:active,.chip:active,.dot:active,.star:active,.face:active,.nps button:active{transform:scale(.93)}
+.skip{background:none;border:none;color:var(--dim);font-weight:700;text-decoration:underline;text-underline-offset:3px;padding:8px}
+/* Gracias */
+.thanks{text-align:left}
+.check svg{width:84px;height:84px;fill:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.check circle{stroke:var(--green)}
+.check path{stroke:var(--mint)}
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:10px}
+.sum{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:2px}
+.sum span{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);font-weight:800}
+.sum b{font:800 26px var(--f-display);font-variant-numeric:tabular-nums}
+.sum:nth-child(1) b{color:var(--gold)} .sum:nth-child(2) b{color:var(--accent-2)} .sum:nth-child(3) b{color:var(--lav)} .sum:nth-child(4) b{color:var(--mint)}
+.note{font-size:13px;color:var(--dim);border-top:1px solid var(--line);padding-top:14px;margin:0}
+.evbox{display:flex;flex-direction:column;gap:2px;padding:12px 14px;border-radius:14px;background:rgba(238,75,34,.1);border:1px solid rgba(238,75,34,.35)}
+.evbox span{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-2);font-weight:800}
+.evbox b{font:700 18px var(--f-display);color:var(--fg)}
+.field small{font-weight:600;color:var(--dim)}
+.errmsg{color:var(--brick);font-weight:700;margin:0;min-height:0}
+.errmsg:empty{display:none}
+footer{text-align:center;font-size:12px;color:var(--dim)}
+/* Movimiento (se apaga si el teléfono pide menos animación) */
+@media (prefers-reduced-motion:no-preference){
+.aura{animation:aura 18s ease-in-out infinite alternate}
+@keyframes aura{to{transform:translate3d(4%,-3%,0) scale(1.08)}}
+.bar span::after{animation:brillo 2.2s infinite}
+@keyframes brillo{to{transform:translateX(100%)}}
+.card.enter{animation:in .55s cubic-bezier(.2,.8,.2,1)}
+.card.enter.adelante{animation-name:inR}
+.card.enter.atras{animation-name:inL}
+.card.enter>*{animation:sube .5s cubic-bezier(.2,.8,.2,1) both}
+.card.enter>*:nth-child(2){animation-delay:.07s}.card.enter>*:nth-child(3){animation-delay:.14s}.card.enter>*:nth-child(4){animation-delay:.21s}.card.enter>*:nth-child(5){animation-delay:.28s}.card.enter>*:nth-child(6){animation-delay:.35s}.card.enter>*:nth-child(7){animation-delay:.42s}
+@keyframes in{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes inR{from{opacity:0;transform:translateX(70px) rotate(1.5deg)}to{opacity:1;transform:none}}
+@keyframes inL{from{opacity:0;transform:translateX(-70px) rotate(-1.5deg)}to{opacity:1;transform:none}}
+@keyframes sube{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.hero{animation:flota 4s ease-in-out infinite}
+@keyframes flota{50%{transform:translateY(-8px) rotate(-3deg)}}
+.star.on svg{animation:estrella .5s cubic-bezier(.3,1.6,.5,1) both;animation-delay:calc(var(--k,1)*60ms)}
+@keyframes estrella{from{transform:scale(.2) rotate(-60deg)}to{transform:none}}
+.face[aria-pressed="true"] svg,.emo.salta{animation:rebote .55s cubic-bezier(.3,1.6,.5,1)}
+@keyframes rebote{0%{transform:scale(.6)}60%{transform:scale(1.25) rotate(8deg)}100%{transform:none}}
+.chip[aria-pressed="true"]{animation:pulso .35s}
+@keyframes pulso{50%{transform:scale(1.08)}}
+.btn.primary::after{animation:barrido 3s infinite}
+@keyframes barrido{0%,60%{left:-60%}100%{left:130%}}
+.check circle{stroke-dasharray:151;stroke-dashoffset:151;animation:traza .7s .15s forwards}
+.check path{stroke-dasharray:40;stroke-dashoffset:40;animation:traza .45s .8s forwards}
+@keyframes traza{to{stroke-dashoffset:0}}
+.sum{animation:sube .5s both}.sum:nth-child(2){animation-delay:.1s}.sum:nth-child(3){animation-delay:.2s}.sum:nth-child(4){animation-delay:.3s}
+}
+@media (prefers-reduced-motion:no-preference){.card.enter>.hero{animation:sube .5s both,flota 4s .6s ease-in-out infinite}}
+</style>
+</head>
+<body>
+<div class="aura" aria-hidden="true"></div>
+<canvas id="lights" aria-hidden="true"></canvas>
+<div class="shell">
+<header>
+<div class="brand"><img src="logo-cubos.png" alt=""><span>Eventum</span></div>
+<div class="step-count" id="count"></div>
+</header>
+<div class="bar" aria-hidden="true"><span id="bar"></span></div>
+<div class="sections" id="sections"></div>
+<main id="main"></main>
+<footer>NOVA BTL S de RL · Tus respuestas nos ayudan a mejorar cada evento</footer>
+</div>
+<script>
+const URL_APP="https://script.google.com/macros/s/AKfycbyipUDT9rYIrbMsW1Nbu5XjPD3PN3Gh1dEb5dN-wffnSKhjNc9l93lkKlfJ8MPA-MNJ/exec";
+const EV=(function(){const p=new URLSearchParams(location.search);const c=(p.get("ev")||"").slice(0,300);const m=c.match(/^(TGU|SPS)\|/);return{clave:c,titulo:(p.get("n")||"").trim().slice(0,150),ciudad:m?m[1]:""}})();
+const EVENTOS=["Lanzamiento de marca","Congreso / convención","Activación BTL","Concierto o show","Evento corporativo interno","Feria o exposición","Otro"];
+const STAR_TXT=["","Muy malo","Malo","Regular","Bueno","Excelente"];
+const FACE_TXT=["Muy mal","Mal","Normal","Bien","Excelente"];
+// Preguntas: una por pantalla. sec = sección mostrada arriba.
+const Q=[
+{id:"inicio",sec:null,type:"intro"},
+{id:"datos",sec:"Tu evento",type:"datos",title:EV.titulo?"Tus datos":"Cuéntanos de qué evento hablamos",req:true},
+{id:"atencion_trato",sec:"Atención",type:"faces",title:"¿Cómo te sentiste con el trato de nuestro equipo?",hint:"Coordinadoras, técnicos y producción.",req:true},
+{id:"atencion_respuesta",sec:"Atención",type:"stars",title:"Rapidez y claridad para responder tus mensajes y solicitudes",req:true},
+{id:"atencion_coordinacion",sec:"Atención",type:"chips1",title:"¿La coordinación antes del evento fue clara?",opts:["Sí, todo claro","En su mayoría","Hubo confusiones","No"],req:true},
+{id:"servicio_tecnico",sec:"Servicio",type:"matrix",title:"Califica cada parte del servicio técnico",hint:"1 = muy malo · 5 = excelente",rows:[
+["Sonido","Claridad, volumen, sin fallas"],["Iluminación","Ambiente y efectos"],["Pantallas y video","Imagen, contenidos, cambios"],["Montaje y escenografía","Orden, limpieza, acabados"],["Producción audiovisual","Fotos, video, transmisión"]],req:true},
+{id:"servicio_puntualidad",sec:"Servicio",type:"chips1",title:"¿El montaje estuvo listo a tiempo?",opts:["Antes de lo acordado","Justo a tiempo","Con poco retraso","Con retraso importante"],req:true},
+{id:"servicio_cotizado",sec:"Servicio",type:"chips1",title:"¿Recibiste todo lo que se cotizó?",opts:["Sí, todo y más","Sí, completo","Faltó algo menor","Faltó algo importante"],req:true},
+{id:"evento_general",sec:"El evento",type:"range",title:"Del 1 al 10, ¿cómo calificas tu evento en general?",req:true},
+{id:"evento_destaco",sec:"El evento",type:"chipsN",title:"¿Qué fue lo que más te gustó?",hint:"Elige todas las que quieras.",opts:["Sonido","Iluminación","Pantallas","Montaje","Puntualidad","Actitud del equipo","Creatividad","Producción audiovisual","Logística","Precio"],req:false},
+{id:"recomendar",sec:"Recomendación",type:"nps",title:"¿Qué tan probable es que recomiendes Eventum a un colega o amigo?",req:true},
+{id:"volver",sec:"Recomendación",type:"chips1",title:"¿Volverías a trabajar con nosotros?",opts:["Sí, sin duda","Probablemente","No lo sé","No"],req:true},
+{id:"comentario",sec:"Recomendación",type:"text",title:"¿Algo que debamos mejorar o que quieras felicitar?",hint:"Opcional. Si mencionas a alguien del equipo, se lo haremos saber.",req:false},
+{id:"fin",sec:null,type:"fin"}
+];
+const SECS=["Tu evento","Atención","Servicio","El evento","Recomendación"];
+const A={}; let i=0;
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const starSvg='<svg viewBox="0 0 24 24"><path d="M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2 6.4 20.2l1.1-6.3L2.9 9.5l6.3-.9z" stroke-linejoin="round"/></svg>';
+function faceSvg(k){
+const mouths=["M15 31q9-8 18 0","M16 30q8-4 16 0","M16 29h16","M16 27q8 5 16 0","M14 26q10 11 20 0"];
+const cols=["#ff5a4d","#ff7a4d","#f5a524","#b49cff","#4fd6a3"];
+return `<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="21" fill="none" stroke="${cols[k]}" stroke-width="2.5"/><circle cx="17" cy="19" r="2.4" fill="${cols[k]}"/><circle cx="31" cy="19" r="2.4" fill="${cols[k]}"/><path d="${mouths[k]}" fill="none" stroke="${cols[k]}" stroke-width="2.6" stroke-linecap="round"/></svg>`;
+}
+function answered(q){
+const v=A[q.id];
+if(q.type==="datos") return v&&v.evento&&v.empresa&&v.nombre;
+if(q.type==="matrix") return v&&q.rows.every(r=>v[r[0]]!=null);
+if(q.type==="chipsN") return v&&v.length;
+if(q.type==="text") return v&&v.trim();
+return v!=null;
+}
+function render(){
+const q=Q[i], m=$("#main");
+const real=Q.filter(x=>x.sec), idx=real.indexOf(q);
+$("#count").textContent=q.sec?`${idx+1} de ${real.length}`:"";
+$("#bar").style.width=q.type==="fin"?"100%":q.sec?`${(idx/real.length)*100}%`:"0%";
+const curSec=SECS.indexOf(q.sec);
+$("#sections").innerHTML=SECS.map((s,k)=>`<b class="${q.type==="fin"||k<curSec?"done":k===curSec?"on":""}">${s}</b>`).join("");
+$("#sections").hidden=!q.sec;
+let body="";
+if(q.type==="intro"){
+m.innerHTML=`<section class="card enter">
+<img class="hero" src="logo-cubos.png" alt="">
+<span class="eyebrow">Encuesta de satisfacción</span>
+<h1>¿Cómo vivimos tu evento?</h1>
+${EV.titulo?`<div class="evbox"><span>Evento</span><b>${esc(EV.titulo)}</b></div>`:""}
+<p class="lead">Son preguntas rápidas sobre la atención, el servicio y el resultado de tu evento: solo tocar y listo. Tu opinión nos ayuda a hacer cada montaje mejor que el anterior.</p>
+<div class="pills"><b>⏱ 2 minutos</b><b>👆 Solo tocar</b><b>💬 Tu opinión cuenta</b></div>
+<nav class="ctrl"><button class="btn primary" data-go="1">Empezar</button></nav></section>`;
+return;
+}
+if(q.type==="fin"){ m.innerHTML=finHTML(); confetti(); return; }
+if(q.type==="datos"){
+const v=A.datos||(A.datos={clave:EV.clave,evento:EV.titulo,ciudad:EV.ciudad==="SPS"?"San Pedro Sula":EV.ciudad==="TGU"?"Tegucigalpa":"",empresa:"",nombre:""});
+body=`${EV.titulo?`<div class="evbox"><span>Evento</span><b>${esc(EV.titulo)}</b></div>`:`<div class="field"><label for="d-evento">Nombre del evento</label><input type="text" id="d-evento" maxlength="150" placeholder="Ej. Lanzamiento de producto" value="${esc(v.evento)}"></div>`}
+<div class="grid2">
+<div class="field"><label for="d-emp">Empresa o marca</label><input type="text" id="d-emp" maxlength="120" value="${esc(v.empresa)}"></div>
+<div class="field"><label for="d-nom">Tu nombre</label><input type="text" id="d-nom" maxlength="120" value="${esc(v.nombre)}"></div>
+${EV.ciudad?"":`<div class="field"><label for="d-ciudad">Ciudad</label><select id="d-ciudad">${["Tegucigalpa","San Pedro Sula","Otra ciudad"].map(c=>`<option ${v.ciudad===c?"selected":""}>${c}</option>`).join("")}</select></div>`}</div>`;
+}
+if(q.type==="stars"){
+const v=A[q.id]||0;
+body=`<div class="stars" role="radiogroup">${[1,2,3,4,5].map(n=>`<button class="star ${n<=v?"on":""}" style="--k:${n}" data-set="${n}" role="radio" aria-checked="${n===v}" aria-label="${n} de 5">${starSvg}</button>`).join("")}</div>
+<div class="star-label">${STAR_TXT[v]||""}</div>`;
+}
+if(q.type==="faces"){
+const v=A[q.id];
+body=`<div class="faces">${[0,1,2,3,4].map(k=>`<button class="face" data-set="${k+1}" aria-pressed="${v===k+1}">${faceSvg(k)}<small>${FACE_TXT[k]}</small></button>`).join("")}</div>`;
+}
+if(q.type==="chips1"){
+const v=A[q.id];
+body=`<div class="chips">${q.opts.map(o=>`<button class="chip" data-set="${esc(o)}" aria-pressed="${v===o}">${o}</button>`).join("")}</div>`;
+}
+if(q.type==="chipsN"){
+const v=A[q.id]||[];
+body=`<div class="chips">${q.opts.map(o=>`<button class="chip" data-tog="${esc(o)}" aria-pressed="${v.includes(o)}">${o}</button>`).join("")}</div>`;
+}
+if(q.type==="matrix"){
+const v=A[q.id]||{};
+body=`<div class="matrix">${q.rows.map(([r,s])=>`<div class="mrow"><div class="lbl">${r}<small>${s}</small></div>
+<div class="dots">${[1,2,3,4,5].map(n=>`<button class="dot" data-row="${r}" data-val="${n}" aria-pressed="${v[r]===n}" aria-label="${r}: ${n}">${n}</button>`).join("")}
+<button class="dot na" data-row="${r}" data-val="0" aria-pressed="${v[r]===0}">No aplica</button></div></div>`).join("")}</div>`;
+}
+if(q.type==="range"){
+const v=A[q.id]??8;
+body=`<div class="range-wrap"><div class="emo" id="emo">${EMO(v)}</div><div class="big" id="bigv">${v}<small> / 10</small></div>
+<input type="range" id="r-${q.id}" min="1" max="10" value="${v}" aria-label="Calificación general">
+<div class="scale-ends"><span>1 · Nada satisfecho</span><span>10 · Totalmente satisfecho</span></div></div>`;
+if(A[q.id]==null) A[q.id]=v;
+}
+if(q.type==="nps"){
+const v=A[q.id];
+body=`<div class="nps">${[...Array(11).keys()].map(n=>`<button class="${n<=6?"lo":n<=8?"mid":"hi"}" data-set="${n}" aria-pressed="${v===n}">${n}</button>`).join("")}</div>
+<div class="scale-ends"><span>0 · Nada probable</span><span>10 · Muy probable</span></div>`;
+}
+if(q.type==="text"){
+body=`<textarea id="t-${q.id}" placeholder="Escribe aquí tu comentario">${esc(A[q.id])}</textarea>`;
+}
+const last=Q[i+1].type==="fin";
+m.innerHTML=`<section class="card enter">
+<span class="eyebrow">${q.sec}</span>
+<h2>${q.title}</h2>${q.hint?`<p class="hint">${q.hint}</p>`:""}
+${body}
+<nav class="ctrl"><button class="btn" data-go="-1" aria-label="Anterior">←</button>
+<button class="btn primary" data-go="1" id="next" ${q.req&&!answered(q)?"disabled":""}>${last?"Enviar respuestas":"Siguiente"}</button>
+${!q.req&&!answered(q)?`<button class="skip" data-go="1">Omitir</button>`:""}</nav>
+${last?`<p class="errmsg" id="err" role="alert"></p>`:""}</section>`;
+}
+function refreshNext(){const q=Q[i],n=$("#next");if(n)n.disabled=q.req&&!answered(q)}
+function finHTML(){
+const st=A.servicio_tecnico||{}, vals=Object.values(st).filter(x=>x>0);
+const prom=vals.length?(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1):"—";
+const nps=A.recomendar, tipo=nps>=9?"Promotor":nps>=7?"Neutral":"Detractor";
+return `<section class="card enter thanks">
+<div class="check"><svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="24"/><path d="M15 27l7 7 15-16"/></svg></div>
+<span class="eyebrow">Respuestas enviadas</span>
+<h1>¡Gracias por confiar en Eventum!</h1>
+<p class="lead">Tu opinión llega directo a coordinación y al equipo técnico. Así se ven tus respuestas:</p>
+<div class="summary">
+<div class="sum"><span>Evento general</span><b>${A.evento_general} / 10</b></div>
+<div class="sum"><span>Atención</span><b>${FACE_TXT[(A.atencion_trato||3)-1]}</b></div>
+<div class="sum"><span>Servicio técnico</span><b>${prom} / 5</b></div>
+<div class="sum"><span>Recomendación</span><b>${nps} · ${tipo}</b></div>
+</div>
+<p class="note">Ya puedes cerrar esta página. ¡Te esperamos en tu próximo evento!</p></section>`;
+}
+// Envío: se guarda en la hoja "Encuestas" de la app
+const ID_ENVIO=(Date.now().toString(36)+Math.random().toString(36).slice(2,10));
+let enviando=false;
+function enviar(b){
+if(enviando) return; enviando=true;
+const txt=b.textContent; b.disabled=true; b.textContent="Enviando…";
+const err=$("#err"); if(err) err.textContent="";
+const ok=()=>{ enviando=false; i=Q.length-1; render(); window.scrollTo({top:0}); };
+const fail=e=>{ enviando=false; b.disabled=false; b.textContent="Intentar de nuevo";
+const el=$("#err"); if(el) el.textContent="No se pudieron enviar tus respuestas. "+((e&&e.message)||"Revisa tu conexión e inténtalo otra vez."); };
+fetch(URL_APP,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(Object.assign({accion:"encuesta",id:ID_ENVIO},A))})
+.then(r=>r.json()).then(j=>{ if(j&&j.ok) ok(); else fail({message:(j&&j.error)||""}); }).catch(()=>fail({}));
+}
+// Eventos
+document.addEventListener("click",e=>{
+const b=e.target.closest("button"); if(!b) return;
+const q=Q[i];
+if(b.dataset.go){ const d=+b.dataset.go;
+if(d>0&&Q[i+1]&&Q[i+1].type==="fin"){ enviar(b); return; }
+i=Math.max(0,Math.min(Q.length-1,i+d)); render(); window.scrollTo({top:0}); return; }
+if(b.hasAttribute("data-retry")){ enviar(b); return; }
+if(b.hasAttribute("data-restart")){ for(const k in A) delete A[k]; i=0; render(); return; }
+if(b.dataset.set!=null){
+const raw=b.dataset.set; A[q.id]=/^\d+$/.test(raw)?+raw:raw; render();
+if(q.type!=="stars"&&q.type!=="nps"&&q.type!=="faces"&&q.type!=="chips1") return;
+return;
+}
+if(b.dataset.tog){ const v=A[q.id]||(A[q.id]=[]); const k=v.indexOf(b.dataset.tog); k<0?v.push(b.dataset.tog):v.splice(k,1);
+b.setAttribute("aria-pressed",k<0); refreshNext(); return; }
+if(b.dataset.row){ const v=A[q.id]||(A[q.id]={}); v[b.dataset.row]=+b.dataset.val;
+b.parentElement.querySelectorAll(".dot").forEach(x=>x.setAttribute("aria-pressed",x===b)); refreshNext(); }
+});
+document.addEventListener("input",e=>{
+const q=Q[i], t=e.target;
+if(t.type==="range"){ A[q.id]=+t.value; $("#bigv").innerHTML=`${t.value}<small> / 10</small>`; }
+if(t.tagName==="TEXTAREA"){ A[q.id]=t.value; }
+if(q.type==="datos"){ const v=A.datos; const g=id=>{const el=$(id);return el?el.value.trim():null};
+if(g("#d-evento")!==null) v.evento=g("#d-evento"); v.empresa=g("#d-emp"); v.nombre=g("#d-nom"); if(g("#d-ciudad")!==null) v.ciudad=g("#d-ciudad"); refreshNext(); }
+});
+document.addEventListener("change",e=>{ if(Q[i].type==="datos") document.dispatchEvent(new Event("input")) });
+document.addEventListener("keydown",e=>{ if(e.key==="Enter"&&e.target.tagName!=="TEXTAREA"&&e.target.tagName!=="BUTTON"){ const n=$("#next"); if(n&&!n.disabled) n.click(); } });
+// Luces de escenario en movimiento
+const cv=$("#lights"), cx=cv.getContext("2d"); let W,H,parts=[];
+const still=matchMedia("(prefers-reduced-motion: reduce)").matches;
+// Cubos isométricos del logo flotando
+const PAL=[["#f06a22","#ee4b23","#a03022"],["#9c88be","#7b62a9","#5a3e99"],["#fce046","#f49b20","#ee4b23"]];
+let cubes=[];
+function size(){W=cv.width=innerWidth*devicePixelRatio;H=cv.height=innerHeight*devicePixelRatio;
+const n=Math.round(Math.min(18,Math.max(8,innerWidth/80)));cubes=[...Array(n)].map((_,k)=>({x:Math.random()*W,y:Math.random()*H,s:(14+Math.random()*30)*devicePixelRatio,v:(.15+Math.random()*.35)*devicePixelRatio,ph:Math.random()*6,p:PAL[k%3],o:.18+Math.random()*.3}))}
+addEventListener("resize",size); size();
+function cube(x,y,s,p,o){const h=s*.5;cx.globalAlpha=o;
+cx.fillStyle=p[0];cx.beginPath();cx.moveTo(x,y-s);cx.lineTo(x+s,y-h);cx.lineTo(x,y);cx.lineTo(x-s,y-h);cx.fill();
+cx.fillStyle=p[1];cx.beginPath();cx.moveTo(x-s,y-h);cx.lineTo(x,y);cx.lineTo(x,y+s);cx.lineTo(x-s,y+h);cx.fill();
+cx.fillStyle=p[2];cx.beginPath();cx.moveTo(x+s,y-h);cx.lineTo(x,y);cx.lineTo(x,y+s);cx.lineTo(x+s,y+h);cx.fill();cx.globalAlpha=1}
+function draw(t){
+cx.clearRect(0,0,W,H);
+for(const c of cubes){ if(!still){c.y-=c.v; if(c.y<-c.s*2){c.y=H+c.s*2;c.x=Math.random()*W}}
+cube(c.x+Math.sin(t*.0005+c.ph)*12*devicePixelRatio,c.y,c.s,c.p,c.o); }
+parts=parts.filter(p=>p.y<H+20);
+for(const p of parts){ p.x+=p.vx; p.y+=p.vy; p.vy+=.12*devicePixelRatio; p.a+=p.va;
+cx.save(); cx.translate(p.x,p.y); cx.rotate(p.a); cx.fillStyle=p.c; cx.fillRect(-p.w/2,-p.h/2,p.w,p.h); cx.restore(); }
+if(!still||parts.length) requestAnimationFrame(draw);
+}
+requestAnimationFrame(draw);
+function confetti(){
+if(still) return;
+const cols=["#ee4b22","#7c5cd6","#f5a524","#4fd6a3"], d=devicePixelRatio;
+for(let k=0;k<140;k++) parts.push({x:W/2,y:H*.35,vx:(Math.random()-.5)*16*d,vy:(-Math.random()*12-4)*d,a:Math.random()*6,va:(Math.random()-.5)*.3,w:(6+Math.random()*6)*d,h:(3+Math.random()*4)*d,c:cols[k%4]});
+}
+// ---- Efectos: sonidos suaves, vibración, chispas y avance automático ----
+let AC=null, AUTO=0, LASTR=0, _prevI=-1;
+function tono(f,d,tp,v,ret){ try{ AC=AC||new (window.AudioContext||window.webkitAudioContext)(); if(AC.state==="suspended") AC.resume();
+const t0=AC.currentTime+(ret||0), o=AC.createOscillator(), g=AC.createGain(); o.type=tp||"sine"; o.frequency.setValueAtTime(f,t0);
+g.gain.setValueAtTime(.0001,t0); g.gain.exponentialRampToValueAtTime(v||.05,t0+.012); g.gain.exponentialRampToValueAtTime(.0001,t0+d);
+o.connect(g); g.connect(AC.destination); o.start(t0); o.stop(t0+d+.03); }catch(e){} }
+const vib=ms=>{ try{ if(navigator.vibrate) navigator.vibrate(ms); }catch(e){} };
+const EMO=v=>v<=3?"😞":v<=5?"😐":v<=7?"🙂":v<=9?"😄":"🤩";
+function burst(b){ if(still) return; const r=b.getBoundingClientRect(), d=devicePixelRatio, x=(r.left+r.width/2)*d, y=(r.top+r.height/2)*d;
+const cols=["#ee4b22","#ff7a4d","#f5a524","#b49cff","#4fd6a3"];
+for(let k=0;k<18;k++){ const a=Math.random()*Math.PI*2, s=(2+Math.random()*5)*d; parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-2*d,a:Math.random()*6,va:(Math.random()-.5)*.4,w:(4+Math.random()*4)*d,h:(2+Math.random()*3)*d,c:cols[k%5]}); } }
+document.addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b) return; const q=Q[i];
+if(b.dataset.set!=null||b.dataset.tog||b.dataset.row){
+  const n=+(b.dataset.set||b.dataset.val)||3; burst(b); vib(12); tono(480+n*40,.18,"triangle",.06);
+  if(b.dataset.set!=null&&/^(faces|chips1|nps|stars)$/.test(q.type)){ const yo=i; clearTimeout(AUTO);
+    AUTO=setTimeout(()=>{ if(i===yo){ const nx=$("#next"); if(nx&&!nx.disabled) nx.click(); } },800); }
+} else if(b.dataset.go){ clearTimeout(AUTO); if(+b.dataset.go>0){ tono(440,.1,"sine",.04); tono(660,.14,"sine",.04,.07); } else tono(380,.1,"sine",.035); }
+},true);
+document.addEventListener("input",e=>{ const t=e.target; if(t.type!=="range") return;
+t.style.setProperty("--p",((t.value-1)/9*100)+"%");
+const em=$("#emo"), v=+t.value; if(em&&em.textContent!==EMO(v)){ em.textContent=EMO(v); em.classList.remove("salta"); void em.offsetWidth; em.classList.add("salta"); }
+if(v!==LASTR){ LASTR=v; tono(300+v*55,.06,"triangle",.03); vib(6); } });
+const _render=render;
+render=function(){ const nuevo=i!==_prevI, dir=i<_prevI?"atras":"adelante"; _prevI=i; _render();
+const c=document.querySelector("#main .card"); if(c){ if(!nuevo) c.classList.remove("enter"); else c.classList.add(dir); }
+const rg=document.querySelector("input[type=range]"); if(rg) rg.style.setProperty("--p",((rg.value-1)/9*100)+"%");
+if(nuevo&&Q[i].type==="fin"){ vib([20,40,20]); [523,659,784,1047].forEach((f,k)=>tono(f,.4,"triangle",.05,k*.11)); setTimeout(confetti,600); setTimeout(confetti,1200); } };
+render();
+</script>
+</body>
+</html>
