@@ -244,6 +244,7 @@ footer{display:flex;flex-direction:column;gap:10px;align-items:center}
  .hero{width:72px}
 }
 @media (min-width:900px){.shell{max-width:760px}.need{grid-template-columns:repeat(3,1fr)}}
+.telrow{display:flex;gap:8px}.telrow select{width:auto;flex:none;padding:14px 10px}.telrow input{flex:1;min-width:0}
 </style>
 </head>
 <body>
@@ -272,14 +273,14 @@ const LS="eventumCot1", LS_MIS="eventumCotMis";
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 let A=nuevo(), i=0, LANG=(PRM.get("lang")||(navigator.language||"es")).slice(0,2)==="en"?"en":"es";
-function nuevo(){return{paquete:"",empresa:"",nombre:"",wa:"",correo:"",conocio:[],tipo:[],fecha:"",sinFecha:false,fechaEstado:"",dias:"",horario:[],ciudad:"",ciudadOtra:"",lugar:"",tipoLugar:[],tamano:"",invitados:"",necesita:[],audio:{personas:"",micros:""},luces:[],led:[],tarima:{medida:"",otra:"",vinil:"",color:"",ubic:""},custom:{tipo:[],espacio:"",espacioOtro:"",elementos:[],estilo:[],diseno:""},estilo:"",presupuesto:"",presNoDecir:false,comentarios:"",archivos:[]}}
+function nuevo(){return{paquete:"",pais:"+504",empresa:"",nombre:"",wa:"",correo:"",conocio:[],tipo:[],fecha:"",sinFecha:false,fechaEstado:"",dias:"",horario:[],ciudad:"",ciudadOtra:"",lugar:"",tipoLugar:[],tamano:"",invitados:"",necesita:[],audio:{personas:"",micros:""},luces:[],led:[],tarima:{medida:"",otra:"",vinil:"",color:"",ubic:""},custom:{tipo:[],espacio:"",espacioOtro:"",elementos:[],estilo:[],diseno:""},estilo:"",presupuesto:"",presNoDecir:false,comentarios:"",archivos:[]}}
 // Textos ES | EN. Las opciones se guardan en español (la parte antes de "|").
 const TX={
 es:{start:"Empezar",cont:"Continuar donde quedaste",next:"Siguiente",back:"Atrás",send:"Enviar solicitud",sending:"Enviando…",cargando:"Cargando…",edit:"Editar",of:"de",
  eye:"Solicitud de cotización",h1:"Cuéntanos de tu evento",lead:"Tocas, eliges y listo. Con esto nuestro equipo arma una propuesta a tu medida.",pill1:"👆 Solo tocar",pill2:"⚡ Respuesta en menos de 24 h",pill3:"💾 Se guarda solo",
  packT:"¿Quieres empezar con un paquete?",packH:"Viene con equipo sugerido que puedes cambiar.",retoma:"Tienes una solicitud a medias.",misT:"Tus solicitudes enviadas",ver:"Ver estado",
  s_contacto:"Contacto",s_evento:"Tu evento",s_lugar:"Lugar",s_necesita:"Lo que necesitas",s_detalle:"Detalles",s_cierre:"Para terminar",
- q_contacto:"¿Con quién hablamos?",emp:"Empresa o marca",nom:"Tu nombre",wa:"WhatsApp",correo:"Correo",opt:"(opcional)",conocio:"¿Cómo nos conociste?",
+ q_contacto:"¿Con quién hablamos?",pais:"Código de país",emp:"Empresa o marca",nom:"Tu nombre",wa:"WhatsApp",correo:"Correo",opt:"(opcional)",conocio:"¿Cómo nos conociste?",
  q_evento:"¿Qué tipo de evento es?",varias:"Puedes elegir varias opciones.",q_fecha:"¿Cuándo es?",q_espacio:"¿De qué tamaño?",lucesH2:"¿Qué tipo de iluminación buscas? Puedes elegir varias.",mult:"varias",fecha:"Fecha del evento",sinFecha:"Aún no tengo fecha",fEst:"¿La fecha está…?",dias:"¿Cuántos días dura?",horario:"Horario",
  q_lugar:"¿Dónde será?",ciudad:"Ciudad",cOtra:"¿Qué ciudad?",tLugar:"Tipo de lugar",tam:"Tamaño del salón o espacio",inv:"Invitados aproximados",lugar:"Nombre del lugar o salón",
  q_necesita:"¿Qué necesitas para tu evento?",necH:"Marca todo lo que aplique.",
@@ -300,7 +301,7 @@ en:{start:"Start",cont:"Continue where you left off",next:"Next",back:"Back",sen
  eye:"Quote request",h1:"Tell us about your event",lead:"Tap, choose, done. Our team will build a proposal made for you.",pill1:"👆 Just tap",pill2:"⚡ Reply within 24 h",pill3:"💾 Auto-saved",
  packT:"Start with a package?",packH:"It comes with suggested equipment you can change.",retoma:"You have an unfinished request.",misT:"Your sent requests",ver:"See status",
  s_contacto:"Contact",s_evento:"Your event",s_lugar:"Venue",s_necesita:"What you need",s_detalle:"Details",s_cierre:"Wrap up",
- q_contacto:"Who are we talking to?",emp:"Company or brand",nom:"Your name",wa:"WhatsApp",correo:"Email",opt:"(optional)",conocio:"How did you find us?",
+ q_contacto:"Who are we talking to?",pais:"Country code",emp:"Company or brand",nom:"Your name",wa:"WhatsApp",correo:"Email",opt:"(optional)",conocio:"How did you find us?",
  q_evento:"What kind of event is it?",varias:"You can pick more than one.",q_fecha:"When is it?",q_espacio:"How big is it?",lucesH2:"What kind of lighting are you after? You can pick several.",mult:"several",fecha:"Event date",sinFecha:"No date yet",fEst:"The date is…",dias:"How many days?",horario:"Schedule",
  q_lugar:"Where will it be?",ciudad:"City",cOtra:"Which city?",tLugar:"Type of venue",tam:"Room or space size",inv:"Approximate guests",lugar:"Venue name",
  q_necesita:"What do you need for your event?",necH:"Select everything that applies.",
@@ -347,6 +348,7 @@ const PACKS=[
 {id:"conc",ico:"🎸",es:["Concierto","Show completo de audio, luz y LED"],en:["Concert","Full sound, light and LED show"],set:{tipo:["Concierto o show"],necesita:["Audio","Iluminación","Pantallas LED","Tarima","Planta eléctrica","Personal técnico"],audio:{personas:"500",micros:"3 a 4"},luces:["Show completo"],led:[{t:"Pantalla",m:"6x3",c:2}],tarima:{medida:"10x3.75",otra:"",vinil:"Con vinil",color:"Negro",ubic:"Exterior"}}},
 {id:"expo",ico:"🧩",es:["Expo o stand","Proyecto a la medida de tu espacio"],en:["Expo or booth","Tailored to your space"],set:{tipo:["Feria o expo"],necesita:["Proyecto personalizado"],custom:{tipo:["Stand de expo"],espacio:"",espacioOtro:"",elementos:[],estilo:[],diseno:""}}},
 {id:"cero",ico:"✏️",es:["Desde cero","Eliges todo tú"],en:["From scratch","You choose everything"],set:{}}];
+const PAISES=[["+504","Honduras","🇭🇳"],["+502","Guatemala","🇬🇹"],["+503","El Salvador","🇸🇻"],["+505","Nicaragua","🇳🇮"],["+506","Costa Rica","🇨🇷"],["+507","Panamá","🇵🇦"],["+52","México","🇲🇽"],["+1","EE. UU. / Canadá","🇺🇸"],["+57","Colombia","🇨🇴"],["+51","Perú","🇵🇪"],["+56","Chile","🇨🇱"],["+54","Argentina","🇦🇷"],["+593","Ecuador","🇪🇨"],["+1 809","Rep. Dominicana","🇩🇴"],["+34","España","🇪🇸"]];
 const tiene=n=>A.necesita.includes(n);
 const Q=[
 {id:"intro",type:"intro"},
@@ -379,7 +381,7 @@ let LED={t:"Pantalla",m:"",c:1};
 function ok(q){
  const d=A;
  switch(q.id){
- case"contacto":return d.empresa.trim()&&d.nombre.trim()&&d.wa.replace(/\D/g,"").length>=8&&(!d.correo||/^\S+@\S+\.\S+$/.test(d.correo));
+ case"contacto":return d.empresa.trim()&&d.nombre.trim()&&d.wa.replace(/\D/g,"").length>=(d.pais==="+504"?8:7)&&(!d.correo||/^\S+@\S+\.\S+$/.test(d.correo));
  case"evento":return d.tipo.length>0;
  case"fecha":return (d.sinFecha||d.fecha)&&(d.sinFecha||d.fechaEstado)&&d.dias&&d.horario.length>0;
  case"lugar":return d.ciudad&&(d.ciudad!=="Otra ciudad"||d.ciudadOtra.trim())&&d.tipoLugar.length>0;
@@ -400,7 +402,7 @@ function leerLS(){try{const s=JSON.parse(localStorage.getItem(LS)||"null");if(s&
 function misSol(){try{return JSON.parse(localStorage.getItem(LS_MIS)||"[]")}catch(e){return[]}}
 function cuerpo(q){
  const d=A;
- if(q.id==="contacto") return `<div class="grid2">${fld("emp","emp",d.empresa)}${fld("nom","nom",d.nombre)}${fld("wa","wa",d.wa,"tel","9999-9999")}${fld("correo","correo",d.correo,"email","nombre@empresa.com",1)}</div>${lblM("conocio")}${chN("conocio",O.conocio)}`;
+ if(q.id==="contacto") return `<div class="grid2">${fld("emp","emp",d.empresa)}${fld("nom","nom",d.nombre)}<div class="field"><label for="wa">${t("wa")}</label><div class="telrow"><select id="pais" data-in="pais" aria-label="${t("pais")}">${PAISES.map(([c,n,f])=>`<option value="${c}" ${d.pais===c?"selected":""}>${f} ${c}</option>`).join("")}</select><input type="tel" id="wa" data-in="wa" maxlength="20" inputmode="tel" autocomplete="tel-national" value="${esc(d.wa)}" placeholder="${d.pais==="+504"?"9999-9999":""}"></div></div>${fld("correo","correo",d.correo,"email","nombre@empresa.com",1)}</div>${lblM("conocio")}${chN("conocio",O.conocio)}`;
  if(q.id==="evento") return chN("tipo",O.tipo);
  if(q.id==="fecha") return `${lbl("fecha")}<div class="grid2"><input type="date" data-in="fecha" value="${esc(d.fecha)}" ${d.sinFecha?"disabled":""} min="${new Date().toISOString().slice(0,10)}"><div class="chips"><button class="chip ask" data-flag="sinFecha" aria-pressed="${d.sinFecha}">${t("sinFecha")}</button></div></div>${d.sinFecha?"":lbl("fEst")+ch1("fechaEstado",O.fEst)}${lbl("dias")}${ch1("dias",O.dias)}${lblM("horario")}${chN("horario",O.horario)}`;
  if(q.id==="lugar") return `${lbl("ciudad")}${ch1("ciudad",O.ciudad)}${d.ciudad==="Otra ciudad"?fld("ciudadOtra","cOtra",d.ciudadOtra):""}${lblM("tLugar")}${chN("tipoLugar",O.tLugar)}${fld("lugar","lugar",d.lugar,"text","",1)}`;
@@ -428,7 +430,7 @@ function cuerpo(q){
 }
 function textoLed(x){return `${x.c} × ${x.t} ${x.m==="ase"?"(medida a sugerir)":x.m+" m"}`}
 function resumen(){const d=A,es=LANG!=="en";const tr=v=>{if(Array.isArray(v))return v.map(tr).join(", ");if(!v)return"";for(const k in O){const arr=Array.isArray(O[k])?O[k]:Object.keys(O[k]);for(const o of arr){const s=Array.isArray(o)?o[1]:o;if(V(s)===v)return L(s)}}return v};
- const r=[["r_contacto","contacto",[[t("emp"),d.empresa],[t("nom"),d.nombre],[t("wa"),d.wa],[t("correo"),d.correo],[t("conocio"),tr(d.conocio)]]],
+ const r=[["r_contacto","contacto",[[t("emp"),d.empresa],[t("nom"),d.nombre],[t("wa"),(d.pais||"+504")+" "+d.wa],[t("correo"),d.correo],[t("conocio"),tr(d.conocio)]]],
  ["r_evento","evento",[[es?"Tipo":"Type",tr(d.tipo)],[t("fecha"),d.sinFecha?t("tbd"):d.fecha.split("-").reverse().join("/")+" · "+tr(d.fechaEstado)],[t("dias"),tr(d.dias)],[t("horario"),tr(d.horario)]]],
  ["r_lugar","lugar",[[t("ciudad"),d.ciudad==="Otra ciudad"?d.ciudadOtra:d.ciudad],[t("tLugar"),tr(d.tipoLugar)],[t("tam"),tr(d.tamano)],[t("inv"),tr(d.invitados)],[t("lugar"),d.lugar]]],
  ["r_eq","necesita",[[es?"Necesita":"Needs",d.necesita.map(tr).join(", ")]]]];
@@ -481,6 +483,7 @@ function enviar(b){if(enviando)return;enviando=true;b.disabled=true;b.textConten
  const fail=m=>{enviando=false;b.disabled=false;b.textContent=t("send");const el=$("#err");if(el)el.textContent=t("errSend")+(m?" ("+m+")":"")};
  const det=resumen().slice(3).map(r=>r[2].filter(x=>x[1]).map(x=>x[0]+": "+x[1]).join("\n")).join("\n");
  const body=Object.assign({accion:"cotizacion",id:ID_ENVIO,lang:LANG,resumen:det,ledTexto:A.led.map(textoLed).join(" · ")},A);
+ body.wa=(A.pais||"+504")+" "+A.wa;
  ["tipo","horario","tipoLugar","conocio"].forEach(k=>{if(Array.isArray(body[k]))body[k]=body[k].join(", ")});
  if(DEMO){setTimeout(()=>fin({ok:true,num:"SOL-DEMO",k:"demo"}),900);return}
  fetch(URL_APP,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(body)}).then(r=>r.json()).then(j=>j&&j.ok?fin(j):fail(j&&j.error)).catch(()=>fail())}
@@ -522,7 +525,7 @@ document.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)r
  if(b.hasAttribute("data-nueva")){A=nuevo();RES=null;history.replaceState(null,"",location.pathname+(DEMO?"?demo":""));i=0;render();return}
 });
 document.addEventListener("input",e=>{const el=e.target,k=el.dataset&&el.dataset.in;if(!k)return;const v=el.value;
- const map={emp:"empresa",nom:"nombre",wa:"wa",correo:"correo",ciudadOtra:"ciudadOtra",lugar:"lugar",fecha:"fecha",pres:"presupuesto",com:"comentarios"};
+ const map={pais:"pais",emp:"empresa",nom:"nombre",wa:"wa",correo:"correo",ciudadOtra:"ciudadOtra",lugar:"lugar",fecha:"fecha",pres:"presupuesto",com:"comentarios"};
  if(map[k])A[map[k]]=map[k]==="correo"?v.trim():v;if(k==="tarimaOtra")A.tarima.otra=v;if(k==="espOtro")A.custom.espacioOtro=v;refresh()});
 document.addEventListener("change",e=>{if(e.target.id!=="files")return;const er=$("#adjErr");er.textContent="";
  [...e.target.files].forEach(f=>{if(A.archivos.length>=3)return;if(f.size>5*1024*1024){er.textContent=t("adjErr");return}
