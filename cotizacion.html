@@ -264,6 +264,11 @@ footer{display:flex;flex-direction:column;gap:10px;align-items:center}
  .grid2{grid-template-columns:repeat(2,minmax(0,1fr))}
  .resumen{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
 }
+.acciones{display:flex;flex-direction:column;gap:10px}
+.acciones .btn,.retoma .btn{text-align:center;text-decoration:none}
+.btn.wa{background:linear-gradient(135deg,#1f9e6e,#2fbf8f);border-color:transparent;color:#fff;text-decoration:none;text-align:center}
+.link-cot{color:var(--accent-2);font-weight:800;text-decoration:none}
+@media (min-width:900px){.acciones{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}}
 </style>
 </head>
 <body>
@@ -299,7 +304,7 @@ es:{start:"Empezar",cont:"Continuar donde quedaste",next:"Siguiente",back:"Atrá
  eye:"Solicitud de cotización",h1:"Cuéntanos de tu evento",lead:"Tocas, eliges y listo. Con esto nuestro equipo arma una propuesta a tu medida.",pill1:"👆 Solo tocar",pill2:"⚡ Respuesta en menos de 24 h",pill3:"💾 Se guarda solo",
  packT:"¿Quieres empezar con un paquete?",packH:"Viene con equipo sugerido que puedes cambiar.",retoma:"Tienes una solicitud a medias.",misT:"Tus solicitudes enviadas",ver:"Ver estado",
  s_contacto:"Contacto",s_evento:"Tu evento",s_lugar:"Lugar",s_necesita:"Lo que necesitas",s_detalle:"Detalles",s_cierre:"Para terminar",
- q_contacto:"¿Con quién hablamos?",invP:"¿Cuántas personas? Ej. 350",verEst:"Ver el estado de mi solicitud",verCot:"Ver mi cotización",pais:"Código de país",emp:"Empresa o marca",nom:"Tu nombre",wa:"WhatsApp",correo:"Correo",opt:"(opcional)",conocio:"¿Cómo nos conociste?",
+ q_contacto:"¿Con quién hablamos?",invP:"¿Cuántas personas? Ej. 350",verEst:"Ver el estado de mi solicitud",verCot:"Ver mi cotización",hablar:"Hablar por WhatsApp con",siguePaso:"¿Qué te pareció tu cotización?",aprobar:"Aprobar cotización",cambiar:"Quiero hacer cambios",confAprob:"¿Confirmas que apruebas la cotización?",confAprobH:"Le avisaremos a tu coordinadora para reservar la fecha y coordinar los siguientes pasos.",siAprobar:"Sí, aprobar",queCambiar:"¿Qué te gustaría cambiar?",notaP:"Cuéntanos el cambio (opcional)",enviarCambios:"Enviar cambios",cambiosErr:"Elige qué cambiar o escribe una nota.",cambiosOk:"¡Recibimos tus cambios!",cambiosOkH:"{r} te enviará una nueva versión de la cotización.",confirmado:"¡Tu evento está confirmado!",confirmadoH:"{r} te contactará para el anticipo, los datos de facturación y los detalles del montaje.",equipo:"Nuestro equipo",ajustando:"Estamos ajustando tu cotización",ajustandoH:"Te enviaremos la nueva versión con los cambios que pediste.",pais:"Código de país",emp:"Empresa o marca",nom:"Tu nombre",wa:"WhatsApp",correo:"Correo",opt:"(opcional)",conocio:"¿Cómo nos conociste?",
  q_evento:"¿Qué tipo de evento es?",varias:"Puedes elegir varias opciones.",q_fecha:"¿Cuándo es?",q_espacio:"¿De qué tamaño?",lucesH2:"¿Qué tipo de iluminación buscas? Puedes elegir varias.",mult:"varias",fecha:"Fecha del evento",sinFecha:"Aún no tengo fecha",fEst:"¿La fecha está…?",dias:"¿Cuántos días dura?",horario:"Horario",
  q_lugar:"¿Dónde será?",ciudad:"Ciudad",cOtra:"¿Qué ciudad?",tLugar:"Tipo de lugar",tam:"Tamaño del salón o espacio",inv:"Invitados aproximados",lugar:"Nombre del lugar o salón",
  q_necesita:"¿Qué necesitas para tu evento?",necH:"Marca todo lo que aplique.",
@@ -320,7 +325,7 @@ en:{start:"Start",cont:"Continue where you left off",next:"Next",back:"Back",sen
  eye:"Quote request",h1:"Tell us about your event",lead:"Tap, choose, done. Our team will build a proposal made for you.",pill1:"👆 Just tap",pill2:"⚡ Reply within 24 h",pill3:"💾 Auto-saved",
  packT:"Start with a package?",packH:"It comes with suggested equipment you can change.",retoma:"You have an unfinished request.",misT:"Your sent requests",ver:"See status",
  s_contacto:"Contact",s_evento:"Your event",s_lugar:"Venue",s_necesita:"What you need",s_detalle:"Details",s_cierre:"Wrap up",
- q_contacto:"Who are we talking to?",invP:"How many people? e.g. 350",verEst:"See my request status",verCot:"See my quote",pais:"Country code",emp:"Company or brand",nom:"Your name",wa:"WhatsApp",correo:"Email",opt:"(optional)",conocio:"How did you find us?",
+ q_contacto:"Who are we talking to?",invP:"How many people? e.g. 350",verEst:"See my request status",verCot:"See my quote",hablar:"WhatsApp",siguePaso:"What did you think of your quote?",aprobar:"Approve quote",cambiar:"I want changes",confAprob:"Do you confirm you approve the quote?",confAprobH:"We'll let your coordinator know to book the date and plan next steps.",siAprobar:"Yes, approve",queCambiar:"What would you like to change?",notaP:"Tell us the change (optional)",enviarCambios:"Send changes",cambiosErr:"Pick what to change or write a note.",cambiosOk:"We got your changes!",cambiosOkH:"{r} will send you a new version of the quote.",confirmado:"Your event is confirmed!",confirmadoH:"{r} will contact you about the deposit, billing details and setup.",equipo:"Our team",ajustando:"We're updating your quote",ajustandoH:"We'll send you the new version with the changes you asked for.",pais:"Country code",emp:"Company or brand",nom:"Your name",wa:"WhatsApp",correo:"Email",opt:"(optional)",conocio:"How did you find us?",
  q_evento:"What kind of event is it?",varias:"You can pick more than one.",q_fecha:"When is it?",q_espacio:"How big is it?",lucesH2:"What kind of lighting are you after? You can pick several.",mult:"several",fecha:"Event date",sinFecha:"No date yet",fEst:"The date is…",dias:"How many days?",horario:"Schedule",
  q_lugar:"Where will it be?",ciudad:"City",cOtra:"Which city?",tLugar:"Type of venue",tam:"Room or space size",inv:"Approximate guests",lugar:"Venue name",
  q_necesita:"What do you need for your event?",necH:"Select everything that applies.",
@@ -352,6 +357,7 @@ inv:["Menos de 50|Under 50","50 a 150|50 to 150","150 a 200|150 to 200","Más de
 nec:[["Audio","Audio|Sound","🔊"],["Iluminación","Iluminación|Lighting","💡"],["Pantallas LED","Pantallas LED|LED screens","🖥️"],["Tarima","Tarima|Stage","🟫"],["DJ o animación","DJ o animación|DJ or host","🎧"],["Planta eléctrica","Planta eléctrica|Power generator","⚡"],["Personal técnico","Personal técnico|Tech crew","🧑‍🔧"],["Proyecto personalizado","Proyecto personalizado|Custom project","🧩"],["Producción completa, asesórenme","Producción completa, asesórenme|Full production, advise me","✨"]],
 personas:["50","100","150","300","500","Más de 500|Over 500"],
 micros:["Ninguno|None","1 a 2|1 to 2","3 a 4|3 to 4","5 o más|5 or more"],
+cambios:["Precio|Price","Equipo|Equipment","Fecha u horario|Date or time","Lugar|Venue","Otro|Other"],
 usos:["Voz y conferencias|Speech and talks","Música ambiental|Background music","DJ o fiesta|DJ or party","Banda en vivo|Live band","Video con sonido|Video with sound"],
 luces:["Ambiental|Ambient","De escenario|Stage","Show completo|Full show","Asesórenme|Advise me"],
 ledT:{"Pantalla|Screen":["3x2","3.5x2","4x2","4x2.5","5x2.5","5x3","6x3","7x3"],"Totem":["2x1","2.5x1","3x1","3x1.5"],"Arco LED|LED arch":["3x3","5x2.5","5x3"],"Franja|Strip":["2x0.5","2.5x0.5"]},
@@ -487,10 +493,10 @@ function render(){
   m.innerHTML=`<section class="card enter"><img class="hero" src="logo-cubos.png" alt=""><span class="eyebrow">${t("eye")}</span><h1>${t("h1")}</h1><p class="lead">${t("lead")}</p>
   <div class="pills"><b>${t("pill1")}</b><b>${t("pill2")}</b><b>${t("pill3")}</b></div>
   ${s&&s.A.empresa?`<div class="retoma"><b>${t("retoma")}</b><button class="btn" data-retoma>${t("cont")} →</button></div>`:""}
-  ${mis.length?`<div class="retoma"><b>${t("misT")}</b>${mis.slice(-3).reverse().map(x=>`<a class="btn" style="text-decoration:none;text-align:center" href="?seg=${encodeURIComponent(x.num)}&k=${encodeURIComponent(x.k)}">${esc(x.num)} · ${t("ver")}</a>`).join("")}</div>`:""}
+  <div class="retoma" id="misBox" hidden></div>
   <h2 style="font-size:20px">${t("packT")}</h2><p class="hint" style="margin-top:-14px">${t("packH")}</p>
   <div class="packs">${PACKS.map(p=>`<button class="pack" data-pack="${p.id}" aria-pressed="${A.paquete===p.id}"><span class="ico">${p.ico}</span><b>${p[LANG][0]}</b><small>${p[LANG][1]}</small></button>`).join("")}</div>
-  <nav class="ctrl"><button class="btn primary" data-go="1" id="next">${t("start")}</button></nav></section>`;return}
+  <nav class="ctrl"><button class="btn primary" data-go="1" id="next">${t("start")}</button></nav></section>`;if(mis.length)verificarMis();return}
  if(q.type==="fin"){m.innerHTML=finHTML();return}
  if(q.type==="seg"){m.innerHTML=`<section class="card enter"><span class="eyebrow">${t("segEye")}</span><h2>${t("cargando")}</h2></section>`;cargarSeg();return}
  const vs=vis(),last=vs[vs.length-1]===q;
@@ -527,18 +533,46 @@ function finHTML(){const u=linkSeg(RES);setTimeout(confetti,300);
  <nav class="ctrl"><button class="btn" style="flex:1" data-copy="${esc(u)}">${t("copiar")}</button></nav>
  ${redesHTML()?`<p class="sub">${t("siguenos")}</p>${redesHTML()}`:""}
  <button class="skip" data-nueva>${t("nueva")}</button></section>`}
+let SEG=null,SEG_MODO="",SEG_QUE=[];
+function postApp(o){return fetch(URL_APP,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(o)}).then(r=>r.json())}
+function waSeg(s){const en=LANG==="en";return "https://wa.me/"+s.wa+"?text="+encodeURIComponent(en?`Hi ${s.responsable}, this is ${s.nombre||""} from ${s.empresa||""}, about my quote ${PRM.get("seg")}.`:`Hola ${s.responsable}, soy ${s.nombre||""} de ${s.empresa||""}, le escribo sobre mi cotización ${PRM.get("seg")}.`)}
+function pintaSeg(){const s=SEG,num=PRM.get("seg")||"",est=s.estado,n=est==="Nueva"?1:est==="En proceso"?2:est==="Ganada"?4:3;
+ const pasos=[["st1","st1s"],["st2","st2s"],["st3","st3s"]].concat(est==="Ganada"?[["st4","st4s"]]:[]);
+ const cambios=/^Pide cambios/.test(s.respuesta||"")&&est==="En proceso";
+ const wa=s.wa?`<a class="btn wa" target="_blank" rel="noopener" href="${waSeg(s)}">💬 ${t("hablar")} ${esc(s.responsable)}</a>`:"";
+ let acc="";
+ if(SEG_MODO==="aprobar") acc=`<div class="retoma"><b>${t("confAprob")}</b><p class="hint" style="margin:0">${t("confAprobH")}</p><nav class="ctrl"><button class="btn" data-seg="">${t("back")}</button><button class="btn primary" data-seg-aprobar>${t("siAprobar")}</button></nav><p class="errmsg" id="segErr"></p></div>`;
+ else if(SEG_MODO==="cambios") acc=`<div class="retoma"><b>${t("queCambiar")} <em class="multi">· ${t("mult")}</em></b><div class="chips">${O.cambios.map(o=>`<button class="chip" data-que="${esc(V(o))}" aria-pressed="${SEG_QUE.includes(V(o))}">${esc(L(o))}</button>`).join("")}</div>
+  <textarea id="segNota" maxlength="800" placeholder="${t("notaP")}"></textarea><nav class="ctrl"><button class="btn" data-seg="">${t("back")}</button><button class="btn primary" data-seg-cambios>${t("enviarCambios")}</button></nav><p class="errmsg" id="segErr"></p></div>`;
+ else if(SEG_MODO==="ok") acc=`<div class="retoma"><b>${t("cambiosOk")}</b><p class="hint" style="margin:0">${t("cambiosOkH").replace("{r}",esc(s.responsable||""))}</p>${wa}</div>`;
+ else if(est==="Cotizada"&&s.cotizacion) acc=`<p class="sub">${t("siguePaso")}</p><div class="acciones"><button class="btn primary" data-seg="aprobar">✅ ${t("aprobar")}</button><button class="btn" data-seg="cambios">✏️ ${t("cambiar")}</button>${wa}</div>`;
+ else if(est==="Ganada") acc=`<div class="retoma"><b>🎉 ${t("confirmado")}</b><p class="hint" style="margin:0">${t("confirmadoH").replace("{r}",esc(s.responsable||t("equipo")))}</p>${wa}</div>`;
+ else if(cambios) acc=`<div class="retoma"><b>${t("ajustando")}</b><p class="hint" style="margin:0">${t("ajustandoH")}</p></div>`;
+ $("#main").innerHTML=`<section class="card"><span class="eyebrow">${t("segEye")}</span><div class="folio">${esc(num)}</div><p class="lead">${esc(s.empresa||"")}${s.evento?" · "+esc(s.evento):""}</p>
+ <div class="track">${pasos.map((p,k)=>`<div class="tk ${k+1<n||(k+1===n&&n===4)?"ok":k+1===n?"ya ok":""}"><i>${k+1<=n?"✓":k+1}</i><div><b>${t(p[0])}</b><small>${t(p[1])}</small></div></div>`).join("")}</div>
+ ${s.cotizacion?`<a class="link-cot" target="_blank" rel="noopener" href="${esc(s.cotizacion)}">📄 ${t("verCot")} →</a>`:""}
+ ${acc}<button class="skip" data-nueva>${t("nueva")}</button></section>`}
 function cargarSeg(){const num=PRM.get("seg")||"",k=PRM.get("k")||"";
- const pinta=s=>{const est=s.estado,n=est==="Nueva"?1:est==="En proceso"?2:est==="Ganada"?4:3;
-  const pasos=[["st1","st1s"],["st2","st2s"],["st3","st3s"]].concat(est==="Ganada"?[["st4","st4s"]]:[]);
-  $("#main").innerHTML=`<section class="card enter"><span class="eyebrow">${t("segEye")}</span><div class="folio">${esc(num)}</div><p class="lead">${esc(s.empresa||"")}${s.evento?" · "+esc(s.evento):""}</p>
-  <div class="track">${pasos.map((p,k)=>`<div class="tk ${k+1<n||(k+1===n&&n===4)?"ok":k+1===n?"ya ok":""}"><i>${k+1<=n?"✓":k+1}</i><div><b>${t(p[0])}</b><small>${t(p[1])}</small></div></div>`).join("")}</div>
-  ${s.cotizacion?`<nav class="ctrl"><a class="btn primary" target="_blank" rel="noopener" style="text-decoration:none;text-align:center" href="${esc(s.cotizacion)}">${t("verCot")} →</a></nav>`:""}
-  <button class="skip" data-nueva>${t("nueva")}</button></section>`};
- if(DEMO){pinta({estado:"En proceso",empresa:"Demo"});return}
- fetch(URL_APP,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({accion:"cotSeguimiento",num,k})}).then(r=>r.json())
- .then(j=>j&&j.ok?pinta(j):$("#main").innerHTML=`<section class="card"><h2>${t("segErr")}</h2><button class="skip" data-nueva>${t("nueva")}</button></section>`).catch(()=>$("#main").innerHTML=`<section class="card"><h2>${t("errSend")}</h2></section>`)}
+ if(DEMO){SEG={estado:PRM.get("est")||"Cotizada",empresa:"Demo",evento:"Lanzamiento",nombre:"Ana",cotizacion:"#",responsable:"Vanesa",wa:"50499998888",respuesta:""};pintaSeg();return}
+ postApp({accion:"cotSeguimiento",num,k}).then(j=>{if(j&&j.ok){SEG=j;pintaSeg()}else{quitarMia(num);$("#main").innerHTML=`<section class="card"><h2>${t("segErr")}</h2><button class="skip" data-nueva>${t("nueva")}</button></section>`}})
+ .catch(()=>$("#main").innerHTML=`<section class="card"><h2>${t("errSend")}</h2></section>`)}
+function quitarMia(num){try{localStorage.setItem(LS_MIS,JSON.stringify(misSol().filter(x=>x.num!==num)))}catch(e){}}
+function responder(tipo){const b=document.querySelector(tipo==="aprobar"?"[data-seg-aprobar]":"[data-seg-cambios]");const er=$("#segErr");
+ const nota=($("#segNota")||{}).value||"";if(tipo==="cambios"&&!SEG_QUE.length&&!nota.trim()){er.textContent=t("cambiosErr");return}
+ b.disabled=true;b.textContent=t("sending");
+ const fin=()=>{if(tipo==="aprobar"){SEG.estado="Ganada";SEG_MODO="";setTimeout(confetti,200)}else{SEG.estado="En proceso";SEG.respuesta="Pide cambios";SEG_MODO="ok"}pintaSeg();window.scrollTo({top:0})};
+ if(DEMO){setTimeout(fin,600);return}
+ postApp({accion:"cotResponder",num:PRM.get("seg"),k:PRM.get("k"),tipo,que:SEG_QUE,nota}).then(j=>{if(j&&j.ok)fin();else{b.disabled=false;b.textContent=t("send");er.textContent=(j&&j.error)||t("errSend")}}).catch(()=>{b.disabled=false;er.textContent=t("errSend")})}
+function verificarMis(){const mis=misSol(),box=$("#misBox");if(!box||!mis.length)return;
+ const pinta=l=>{if(!l.length){box.hidden=true;return}box.hidden=false;box.innerHTML=`<b>${t("misT")}</b>`+l.slice(-3).reverse().map(x=>`<a class="btn" style="text-decoration:none;text-align:center" href="?seg=${encodeURIComponent(x.num)}&k=${encodeURIComponent(x.k)}">${esc(x.num)} · ${t("ver")}</a>`).join("")};
+ if(DEMO){pinta(mis);return}
+ postApp({accion:"cotExisten",items:mis.map(x=>({num:x.num,k:x.k}))}).then(j=>{if(!j||!j.ok)return;const ok=mis.filter(x=>j.existen.includes(x.num));try{localStorage.setItem(LS_MIS,JSON.stringify(ok))}catch(e){}pinta(ok)}).catch(()=>{})}
 // ---- Eventos ----
 document.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const q=Q[i];
+ if(b.dataset.seg!=null){SEG_MODO=b.dataset.seg;if(SEG_MODO==="cambios")SEG_QUE=[];pintaSeg();return}
+ if(b.hasAttribute("data-seg-aprobar")){responder("aprobar");return}
+ if(b.hasAttribute("data-seg-cambios")){responder("cambios");return}
+ if(b.dataset.que){const k=SEG_QUE.indexOf(b.dataset.que);k<0?SEG_QUE.push(b.dataset.que):SEG_QUE.splice(k,1);b.setAttribute("aria-pressed",k<0);return}
  if(b.dataset.lang){LANG=b.dataset.lang;render();guardarLS();return}
  if(b.dataset.go){mover(+b.dataset.go);return}
  if(b.hasAttribute("data-retoma")){const s=leerLS();A=normal(Object.assign(nuevo(),s.A));LANG=s.lang||LANG;const k=Q.findIndex(x=>x.id===s.id);i=k>0?k:1;render();return}
