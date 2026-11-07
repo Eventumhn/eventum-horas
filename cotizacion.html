@@ -273,14 +273,14 @@ const LS="eventumCot1", LS_MIS="eventumCotMis";
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 let A=nuevo(), i=0, LANG=(PRM.get("lang")||(navigator.language||"es")).slice(0,2)==="en"?"en":"es";
-function nuevo(){return{paquete:"",pais:"+504",empresa:"",nombre:"",wa:"",correo:"",conocio:[],tipo:[],fecha:"",sinFecha:false,fechaEstado:"",dias:"",horario:[],ciudad:"",ciudadOtra:"",lugar:"",tipoLugar:[],tamano:"",invitados:"",necesita:[],audio:{personas:"",micros:""},luces:[],led:[],tarima:{medida:"",otra:"",vinil:"",color:"",ubic:""},custom:{tipo:[],espacio:"",espacioOtro:"",elementos:[],estilo:[],diseno:""},estilo:"",presupuesto:"",presNoDecir:false,comentarios:"",archivos:[]}}
+function nuevo(){return{paquete:"",pais:"+504",empresa:"",nombre:"",wa:"",correo:"",conocio:[],tipo:[],fecha:"",sinFecha:false,fechaEstado:"",dias:"",horario:[],ciudad:"",ciudadOtra:"",lugar:"",tipoLugar:[],invNum:"",tamano:"",invitados:"",necesita:[],audio:{personas:"",micros:""},luces:[],led:[],tarima:{medida:"",otra:"",vinil:"",color:"",ubic:""},custom:{tipo:[],espacio:"",espacioOtro:"",elementos:[],estilo:[],diseno:""},estilo:"",presupuesto:"",presNoDecir:false,comentarios:"",archivos:[]}}
 // Textos ES | EN. Las opciones se guardan en español (la parte antes de "|").
 const TX={
 es:{start:"Empezar",cont:"Continuar donde quedaste",next:"Siguiente",back:"Atrás",send:"Enviar solicitud",sending:"Enviando…",cargando:"Cargando…",edit:"Editar",of:"de",
  eye:"Solicitud de cotización",h1:"Cuéntanos de tu evento",lead:"Tocas, eliges y listo. Con esto nuestro equipo arma una propuesta a tu medida.",pill1:"👆 Solo tocar",pill2:"⚡ Respuesta en menos de 24 h",pill3:"💾 Se guarda solo",
  packT:"¿Quieres empezar con un paquete?",packH:"Viene con equipo sugerido que puedes cambiar.",retoma:"Tienes una solicitud a medias.",misT:"Tus solicitudes enviadas",ver:"Ver estado",
  s_contacto:"Contacto",s_evento:"Tu evento",s_lugar:"Lugar",s_necesita:"Lo que necesitas",s_detalle:"Detalles",s_cierre:"Para terminar",
- q_contacto:"¿Con quién hablamos?",pais:"Código de país",emp:"Empresa o marca",nom:"Tu nombre",wa:"WhatsApp",correo:"Correo",opt:"(opcional)",conocio:"¿Cómo nos conociste?",
+ q_contacto:"¿Con quién hablamos?",invP:"¿Cuántas personas? Ej. 350",verEst:"Ver el estado de mi solicitud",pais:"Código de país",emp:"Empresa o marca",nom:"Tu nombre",wa:"WhatsApp",correo:"Correo",opt:"(opcional)",conocio:"¿Cómo nos conociste?",
  q_evento:"¿Qué tipo de evento es?",varias:"Puedes elegir varias opciones.",q_fecha:"¿Cuándo es?",q_espacio:"¿De qué tamaño?",lucesH2:"¿Qué tipo de iluminación buscas? Puedes elegir varias.",mult:"varias",fecha:"Fecha del evento",sinFecha:"Aún no tengo fecha",fEst:"¿La fecha está…?",dias:"¿Cuántos días dura?",horario:"Horario",
  q_lugar:"¿Dónde será?",ciudad:"Ciudad",cOtra:"¿Qué ciudad?",tLugar:"Tipo de lugar",tam:"Tamaño del salón o espacio",inv:"Invitados aproximados",lugar:"Nombre del lugar o salón",
  q_necesita:"¿Qué necesitas para tu evento?",necH:"Marca todo lo que aplique.",
@@ -301,7 +301,7 @@ en:{start:"Start",cont:"Continue where you left off",next:"Next",back:"Back",sen
  eye:"Quote request",h1:"Tell us about your event",lead:"Tap, choose, done. Our team will build a proposal made for you.",pill1:"👆 Just tap",pill2:"⚡ Reply within 24 h",pill3:"💾 Auto-saved",
  packT:"Start with a package?",packH:"It comes with suggested equipment you can change.",retoma:"You have an unfinished request.",misT:"Your sent requests",ver:"See status",
  s_contacto:"Contact",s_evento:"Your event",s_lugar:"Venue",s_necesita:"What you need",s_detalle:"Details",s_cierre:"Wrap up",
- q_contacto:"Who are we talking to?",pais:"Country code",emp:"Company or brand",nom:"Your name",wa:"WhatsApp",correo:"Email",opt:"(optional)",conocio:"How did you find us?",
+ q_contacto:"Who are we talking to?",invP:"How many people? e.g. 350",verEst:"See my request status",pais:"Country code",emp:"Company or brand",nom:"Your name",wa:"WhatsApp",correo:"Email",opt:"(optional)",conocio:"How did you find us?",
  q_evento:"What kind of event is it?",varias:"You can pick more than one.",q_fecha:"When is it?",q_espacio:"How big is it?",lucesH2:"What kind of lighting are you after? You can pick several.",mult:"several",fecha:"Event date",sinFecha:"No date yet",fEst:"The date is…",dias:"How many days?",horario:"Schedule",
  q_lugar:"Where will it be?",ciudad:"City",cOtra:"Which city?",tLugar:"Type of venue",tam:"Room or space size",inv:"Approximate guests",lugar:"Venue name",
  q_necesita:"What do you need for your event?",necH:"Select everything that applies.",
@@ -329,7 +329,7 @@ horario:["Mañana|Morning","Tarde|Afternoon","Noche|Evening","Todo el día|All d
 ciudad:["Tegucigalpa","San Pedro Sula","Otra ciudad|Other city"],
 tLugar:["Salón cerrado|Indoor hall","Al aire libre|Outdoors","Hotel","Centro de convenciones|Convention center"],
 tam:["Pequeño|Small","Mediano|Medium","Grande|Large","No sé|Not sure"],
-inv:["Menos de 50|Under 50","50 a 150|50 to 150","150 a 500|150 to 500","Más de 500|Over 500"],
+inv:["Menos de 50|Under 50","50 a 150|50 to 150","150 a 200|150 to 200","Más de 200|Over 200"],
 nec:[["Audio","Audio|Sound","🔊"],["Iluminación","Iluminación|Lighting","💡"],["Pantallas LED","Pantallas LED|LED screens","🖥️"],["Tarima","Tarima|Stage","🟫"],["DJ o animación","DJ o animación|DJ or host","🎧"],["Planta eléctrica","Planta eléctrica|Power generator","⚡"],["Personal técnico","Personal técnico|Tech crew","🧑‍🔧"],["Proyecto personalizado","Proyecto personalizado|Custom project","🧩"],["Producción completa, asesórenme","Producción completa, asesórenme|Full production, advise me","✨"]],
 personas:["50","100","150","300","500","Más de 500|Over 500"],
 micros:["Ninguno|None","1 a 2|1 to 2","3 a 4|3 to 4","5 o más|5 or more"],
@@ -385,7 +385,7 @@ function ok(q){
  case"evento":return d.tipo.length>0;
  case"fecha":return (d.sinFecha||d.fecha)&&(d.sinFecha||d.fechaEstado)&&d.dias&&d.horario.length>0;
  case"lugar":return d.ciudad&&(d.ciudad!=="Otra ciudad"||d.ciudadOtra.trim())&&d.tipoLugar.length>0;
- case"espacio":return d.tamano&&d.invitados;
+ case"espacio":return d.tamano&&d.invitados&&(d.invitados!=="Más de 200"||Number(d.invNum)>0);
  case"necesita":return d.necesita.length>0;
  case"audio":return d.audio.personas&&d.audio.micros;
  case"luces":return d.luces.length>0;
@@ -406,7 +406,7 @@ function cuerpo(q){
  if(q.id==="evento") return chN("tipo",O.tipo);
  if(q.id==="fecha") return `${lbl("fecha")}<div class="grid2"><input type="date" data-in="fecha" value="${esc(d.fecha)}" ${d.sinFecha?"disabled":""} min="${new Date().toISOString().slice(0,10)}"><div class="chips"><button class="chip ask" data-flag="sinFecha" aria-pressed="${d.sinFecha}">${t("sinFecha")}</button></div></div>${d.sinFecha?"":lbl("fEst")+ch1("fechaEstado",O.fEst)}${lbl("dias")}${ch1("dias",O.dias)}${lblM("horario")}${chN("horario",O.horario)}`;
  if(q.id==="lugar") return `${lbl("ciudad")}${ch1("ciudad",O.ciudad)}${d.ciudad==="Otra ciudad"?fld("ciudadOtra","cOtra",d.ciudadOtra):""}${lblM("tLugar")}${chN("tipoLugar",O.tLugar)}${fld("lugar","lugar",d.lugar,"text","",1)}`;
- if(q.id==="espacio") return `${lbl("tam")}${ch1("tamano",O.tam,1)}${lbl("inv")}${ch1("invitados",O.inv)}`;
+ if(q.id==="espacio") return `${lbl("tam")}${ch1("tamano",O.tam,1)}${lbl("inv")}${ch1("invitados",O.inv)}${d.invitados==="Más de 200"?`<input type="number" inputmode="numeric" min="201" step="10" data-in="invNum" placeholder="${t("invP")}" value="${esc(d.invNum)}">`:""}`;
  if(q.id==="necesita") return `<div class="need">${O.nec.map(([v,l,ic])=>`<button class="pack" data-tk="necesita" data-v="${esc(v)}" aria-pressed="${tiene(v)}"><span class="ico">${ic}</span><b>${esc(L(l))}</b></button>`).join("")}</div>`;
  if(q.id==="audio") return `${ch1("audio.personas",O.personas)}${lbl("micros")}${ch1("audio.micros",O.micros)}`;
  if(q.id==="luces") return chN("luces",O.luces);
@@ -432,7 +432,7 @@ function textoLed(x){return `${x.c} × ${x.t} ${x.m==="ase"?"(medida a sugerir)"
 function resumen(){const d=A,es=LANG!=="en";const tr=v=>{if(Array.isArray(v))return v.map(tr).join(", ");if(!v)return"";for(const k in O){const arr=Array.isArray(O[k])?O[k]:Object.keys(O[k]);for(const o of arr){const s=Array.isArray(o)?o[1]:o;if(V(s)===v)return L(s)}}return v};
  const r=[["r_contacto","contacto",[[t("emp"),d.empresa],[t("nom"),d.nombre],[t("wa"),(d.pais||"+504")+" "+d.wa],[t("correo"),d.correo],[t("conocio"),tr(d.conocio)]]],
  ["r_evento","evento",[[es?"Tipo":"Type",tr(d.tipo)],[t("fecha"),d.sinFecha?t("tbd"):d.fecha.split("-").reverse().join("/")+" · "+tr(d.fechaEstado)],[t("dias"),tr(d.dias)],[t("horario"),tr(d.horario)]]],
- ["r_lugar","lugar",[[t("ciudad"),d.ciudad==="Otra ciudad"?d.ciudadOtra:d.ciudad],[t("tLugar"),tr(d.tipoLugar)],[t("tam"),tr(d.tamano)],[t("inv"),tr(d.invitados)],[t("lugar"),d.lugar]]],
+ ["r_lugar","lugar",[[t("ciudad"),d.ciudad==="Otra ciudad"?d.ciudadOtra:d.ciudad],[t("tLugar"),tr(d.tipoLugar)],[t("tam"),tr(d.tamano)],[t("inv"),d.invitados==="Más de 200"&&d.invNum?d.invNum+(es?" personas":" people"):tr(d.invitados)],[t("lugar"),d.lugar]]],
  ["r_eq","necesita",[[es?"Necesita":"Needs",d.necesita.map(tr).join(", ")]]]];
  const eq=r[3][2];
  if(tiene("Audio")) eq.push([t("q_audio"),tr(d.audio.personas)+(es?" personas":" people")+" · "+t("micros")+": "+tr(d.audio.micros)]);
@@ -452,7 +452,7 @@ function header(q){
  $("#sections").innerHTML=SECS.map((s,k)=>`<b class="${q.type==="fin"||k<cs?"done":k===cs?"on":""}">${t(s)}</b>`).join("");
  $("#sections").hidden=!q.sec;
  $("#langbox").innerHTML=`<button data-lang="es" aria-pressed="${LANG==="es"}">ES</button><button data-lang="en" aria-pressed="${LANG==="en"}">EN</button>`;
- document.documentElement.lang=LANG;$("#foot").innerHTML=redesHTML()+`<span>${t("foot")}</span>`;
+ document.documentElement.lang=LANG;$("#foot").innerHTML=(q.type==="fin"?"":redesHTML())+`<span>${t("foot")}</span>`;
 }
 function render(){
  const q=Q[i],m=$("#main");header(q);
@@ -484,6 +484,7 @@ function enviar(b){if(enviando)return;enviando=true;b.disabled=true;b.textConten
  const det=resumen().slice(3).map(r=>r[2].filter(x=>x[1]).map(x=>x[0]+": "+x[1]).join("\n")).join("\n");
  const body=Object.assign({accion:"cotizacion",id:ID_ENVIO,lang:LANG,resumen:det,ledTexto:A.led.map(textoLed).join(" · ")},A);
  body.wa=(A.pais||"+504")+" "+A.wa;
+ if(A.invitados==="Más de 200"&&A.invNum)body.invitados=A.invNum+" personas";
  ["tipo","horario","tipoLugar","conocio"].forEach(k=>{if(Array.isArray(body[k]))body[k]=body[k].join(", ")});
  if(DEMO){setTimeout(()=>fin({ok:true,num:"SOL-DEMO",k:"demo"}),900);return}
  fetch(URL_APP,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(body)}).then(r=>r.json()).then(j=>j&&j.ok?fin(j):fail(j&&j.error)).catch(()=>fail())}
@@ -492,8 +493,9 @@ function finHTML(){const u=linkSeg(RES);setTimeout(confetti,300);
  return `<section class="card enter thanks"><div class="check"><svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="24"/><path d="M15 27l7 7 15-16"/></svg></div>
  <span class="eyebrow">${t("okEye")}</span><h1>${t("okH")}</h1><p class="lead">${t("okLead")}</p><div class="folio">${esc(RES.num)}</div>
  <p class="lead">${t("okNote")} ${A.correo?t("okMail"):""}</p><p class="hint" style="margin:0">${t("okSeg")}</p>
- <div class="evbox"><b style="font-size:14px;word-break:break-all">${esc(u)}</b></div>
- <nav class="ctrl"><button class="btn primary" data-copy="${esc(u)}">${t("copiar")}</button></nav>
+ <a class="evbox" href="${esc(u)}" style="text-decoration:none"><b style="font-size:14px;word-break:break-all">${esc(u)}</b></a>
+ <nav class="ctrl"><a class="btn primary" href="${esc(u)}" style="text-decoration:none;text-align:center">${t("verEst")} →</a></nav>
+ <nav class="ctrl"><button class="btn" style="flex:1" data-copy="${esc(u)}">${t("copiar")}</button></nav>
  ${redesHTML()?`<p class="sub">${t("siguenos")}</p>${redesHTML()}`:""}
  <button class="skip" data-nueva>${t("nueva")}</button></section>`}
 function cargarSeg(){const num=PRM.get("seg")||"",k=PRM.get("k")||"";
@@ -525,7 +527,7 @@ document.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)r
  if(b.hasAttribute("data-nueva")){A=nuevo();RES=null;history.replaceState(null,"",location.pathname+(DEMO?"?demo":""));i=0;render();return}
 });
 document.addEventListener("input",e=>{const el=e.target,k=el.dataset&&el.dataset.in;if(!k)return;const v=el.value;
- const map={pais:"pais",emp:"empresa",nom:"nombre",wa:"wa",correo:"correo",ciudadOtra:"ciudadOtra",lugar:"lugar",fecha:"fecha",pres:"presupuesto",com:"comentarios"};
+ const map={invNum:"invNum",pais:"pais",emp:"empresa",nom:"nombre",wa:"wa",correo:"correo",ciudadOtra:"ciudadOtra",lugar:"lugar",fecha:"fecha",pres:"presupuesto",com:"comentarios"};
  if(map[k])A[map[k]]=map[k]==="correo"?v.trim():v;if(k==="tarimaOtra")A.tarima.otra=v;if(k==="espOtro")A.custom.espacioOtro=v;refresh()});
 document.addEventListener("change",e=>{if(e.target.id!=="files")return;const er=$("#adjErr");er.textContent="";
  [...e.target.files].forEach(f=>{if(A.archivos.length>=3)return;if(f.size>5*1024*1024){er.textContent=t("adjErr");return}
