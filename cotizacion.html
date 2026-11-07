@@ -245,6 +245,25 @@ footer{display:flex;flex-direction:column;gap:10px;align-items:center}
 }
 @media (min-width:900px){.shell{max-width:760px}.need{grid-template-columns:repeat(3,1fr)}}
 .telrow{display:flex;gap:8px}.telrow select{width:auto;flex:none;padding:14px 10px}.telrow input{flex:1;min-width:0}
+.stepper{flex-wrap:wrap}
+.stepper .add{width:auto;height:48px;margin-left:auto;padding:0 18px;font:800 15px var(--f-body);white-space:nowrap;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent-2));border-color:transparent;color:#fff}
+.items{flex-direction:row;flex-wrap:wrap;gap:8px}
+.item{display:inline-flex;padding:8px 6px 8px 14px;border-radius:99px;font-size:14px;gap:6px}
+.item button{margin-left:2px;font-size:18px;padding:0 6px;line-height:1}
+.numin{margin-top:-4px}
+.picker{display:flex;flex-direction:column;gap:18px}
+.pk-a,.pk-b{display:flex;flex-direction:column;gap:18px;min-width:0}
+@media (min-width:900px){
+ .picker{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);align-items:start;gap:24px}
+ .pk-b{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:18px;position:sticky;top:16px}
+}
+@media (min-width:1100px){
+ .shell{max-width:1040px}
+ .packs{grid-template-columns:repeat(5,minmax(0,1fr))}
+ .need{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .grid2{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .resumen{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+}
 </style>
 </head>
 <body>
@@ -273,21 +292,21 @@ const LS="eventumCot1", LS_MIS="eventumCotMis";
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 let A=nuevo(), i=0, LANG=(PRM.get("lang")||(navigator.language||"es")).slice(0,2)==="en"?"en":"es";
-function nuevo(){return{paquete:"",pais:"+504",empresa:"",nombre:"",wa:"",correo:"",conocio:[],tipo:[],fecha:"",sinFecha:false,fechaEstado:"",dias:"",horario:[],ciudad:"",ciudadOtra:"",lugar:"",tipoLugar:[],invNum:"",tamano:"",invitados:"",necesita:[],audio:{personas:"",micros:""},luces:[],led:[],tarima:{medida:"",otra:"",vinil:"",color:"",ubic:""},custom:{tipo:[],espacio:"",espacioOtro:"",elementos:[],estilo:[],diseno:""},estilo:"",presupuesto:"",presNoDecir:false,comentarios:"",archivos:[]}}
+function nuevo(){return{paquete:"",pais:"+504",empresa:"",nombre:"",wa:"",correo:"",conocio:[],tipo:[],fecha:"",sinFecha:false,fechaEstado:"",dias:"",diasNum:"",horario:[],ciudad:"",ciudadOtra:"",lugar:"",tipoLugar:[],invNum:"",tamano:"",invitados:"",necesita:[],audio:{usos:[],micros:"",microsNum:""},luces:[],led:[],tarimas:[],custom:{tipo:[],espacio:"",espacioOtro:"",elementos:[],estilo:[],diseno:""},estilo:"",presupuesto:"",presNoDecir:false,comentarios:"",archivos:[]}}
 // Textos ES | EN. Las opciones se guardan en español (la parte antes de "|").
 const TX={
 es:{start:"Empezar",cont:"Continuar donde quedaste",next:"Siguiente",back:"Atrás",send:"Enviar solicitud",sending:"Enviando…",cargando:"Cargando…",edit:"Editar",of:"de",
  eye:"Solicitud de cotización",h1:"Cuéntanos de tu evento",lead:"Tocas, eliges y listo. Con esto nuestro equipo arma una propuesta a tu medida.",pill1:"👆 Solo tocar",pill2:"⚡ Respuesta en menos de 24 h",pill3:"💾 Se guarda solo",
  packT:"¿Quieres empezar con un paquete?",packH:"Viene con equipo sugerido que puedes cambiar.",retoma:"Tienes una solicitud a medias.",misT:"Tus solicitudes enviadas",ver:"Ver estado",
  s_contacto:"Contacto",s_evento:"Tu evento",s_lugar:"Lugar",s_necesita:"Lo que necesitas",s_detalle:"Detalles",s_cierre:"Para terminar",
- q_contacto:"¿Con quién hablamos?",invP:"¿Cuántas personas? Ej. 350",verEst:"Ver el estado de mi solicitud",pais:"Código de país",emp:"Empresa o marca",nom:"Tu nombre",wa:"WhatsApp",correo:"Correo",opt:"(opcional)",conocio:"¿Cómo nos conociste?",
+ q_contacto:"¿Con quién hablamos?",invP:"¿Cuántas personas? Ej. 350",verEst:"Ver el estado de mi solicitud",verCot:"Ver mi cotización",pais:"Código de país",emp:"Empresa o marca",nom:"Tu nombre",wa:"WhatsApp",correo:"Correo",opt:"(opcional)",conocio:"¿Cómo nos conociste?",
  q_evento:"¿Qué tipo de evento es?",varias:"Puedes elegir varias opciones.",q_fecha:"¿Cuándo es?",q_espacio:"¿De qué tamaño?",lucesH2:"¿Qué tipo de iluminación buscas? Puedes elegir varias.",mult:"varias",fecha:"Fecha del evento",sinFecha:"Aún no tengo fecha",fEst:"¿La fecha está…?",dias:"¿Cuántos días dura?",horario:"Horario",
  q_lugar:"¿Dónde será?",ciudad:"Ciudad",cOtra:"¿Qué ciudad?",tLugar:"Tipo de lugar",tam:"Tamaño del salón o espacio",inv:"Invitados aproximados",lugar:"Nombre del lugar o salón",
  q_necesita:"¿Qué necesitas para tu evento?",necH:"Marca todo lo que aplique.",
- q_audio:"Audio",audioH:"¿Para cuántas personas? Nosotros definimos el equipo.",micros:"Micrófonos inalámbricos",
+ q_audio:"Audio",audioH:"Con los invitados que nos diste definimos el equipo.",usos:"¿Para qué es el audio?",cuantos:"¿Cuántos?",diasP:"¿Cuántos días?",tarErr:"Completa medida, vinil y ubicación",tarVacio:"Aún no agregas tarimas",tarAdd:"Agregar tarima",micros:"Micrófonos inalámbricos",
  q_luces:"Iluminación",lucesH:"¿Qué tipo de iluminación buscas?",
  q_led:"Pantallas LED",ledH:"Elige tipo, medida (en metros) y cantidad. Si no sabes, te asesoramos.",tipoLed:"Tipo",medida:"Medida",cant:"Cantidad",agregar:"Agregar",ledVacio:"Aún no agregas pantallas",ledErr:"Elige una medida primero",sugerir:"medida a sugerir",
- q_tarima:"Tarima",tarimaH:"Cada módulo mide 1.25 × 1.25 m.",otraM:"Otra medida",otraP:"Ej. 8.75 x 3.75",vinil:"Vinil",color:"Color del vinil",ubic:"La tarima estará…",
+ q_tarima:"Tarima",tarimaH:"Cada módulo mide 1.25 × 1.25 m. Puedes agregar varias.",otraM:"Otra medida",otraP:"Ej. 8.75 x 3.75",vinil:"Vinil",color:"Color del vinil",ubic:"La tarima estará…",
  q_custom:"Proyecto personalizado",customH:"Stands, escenografías y piezas de marca.",cTipo:"¿Qué necesitas?",esp:"Espacio asignado (metros)",espP:"Ej. 4x8",elem:"¿Qué debe llevar?",estilo:"Estilo",diseno:"¿Tienes diseño?",
  q_gal:"¿Qué estilo te inspira?",galH:"Algunos de nuestros montajes.",
  q_pres:"Presupuesto aproximado",presH:"Nos ayuda a proponerte lo mejor dentro de tu rango.",presP:"Monto en lempiras",noDecir:"Prefiero no decir",
@@ -301,14 +320,14 @@ en:{start:"Start",cont:"Continue where you left off",next:"Next",back:"Back",sen
  eye:"Quote request",h1:"Tell us about your event",lead:"Tap, choose, done. Our team will build a proposal made for you.",pill1:"👆 Just tap",pill2:"⚡ Reply within 24 h",pill3:"💾 Auto-saved",
  packT:"Start with a package?",packH:"It comes with suggested equipment you can change.",retoma:"You have an unfinished request.",misT:"Your sent requests",ver:"See status",
  s_contacto:"Contact",s_evento:"Your event",s_lugar:"Venue",s_necesita:"What you need",s_detalle:"Details",s_cierre:"Wrap up",
- q_contacto:"Who are we talking to?",invP:"How many people? e.g. 350",verEst:"See my request status",pais:"Country code",emp:"Company or brand",nom:"Your name",wa:"WhatsApp",correo:"Email",opt:"(optional)",conocio:"How did you find us?",
+ q_contacto:"Who are we talking to?",invP:"How many people? e.g. 350",verEst:"See my request status",verCot:"See my quote",pais:"Country code",emp:"Company or brand",nom:"Your name",wa:"WhatsApp",correo:"Email",opt:"(optional)",conocio:"How did you find us?",
  q_evento:"What kind of event is it?",varias:"You can pick more than one.",q_fecha:"When is it?",q_espacio:"How big is it?",lucesH2:"What kind of lighting are you after? You can pick several.",mult:"several",fecha:"Event date",sinFecha:"No date yet",fEst:"The date is…",dias:"How many days?",horario:"Schedule",
  q_lugar:"Where will it be?",ciudad:"City",cOtra:"Which city?",tLugar:"Type of venue",tam:"Room or space size",inv:"Approximate guests",lugar:"Venue name",
  q_necesita:"What do you need for your event?",necH:"Select everything that applies.",
- q_audio:"Sound",audioH:"For how many people? We'll define the gear.",micros:"Wireless microphones",
+ q_audio:"Sound",audioH:"We'll define the gear based on your guest count.",usos:"What is the sound for?",cuantos:"How many?",diasP:"How many days?",tarErr:"Pick size, vinyl and location",tarVacio:"No stages added yet",tarAdd:"Add stage",micros:"Wireless microphones",
  q_luces:"Lighting",lucesH:"What kind of lighting are you after?",
  q_led:"LED screens",ledH:"Pick type, size (meters) and quantity. Not sure? We'll advise you.",tipoLed:"Type",medida:"Size",cant:"Quantity",agregar:"Add",ledVacio:"No screens added yet",ledErr:"Pick a size first",sugerir:"size to be suggested",
- q_tarima:"Stage",tarimaH:"Each module is 1.25 × 1.25 m.",otraM:"Other size",otraP:"e.g. 8.75 x 3.75",vinil:"Vinyl",color:"Vinyl color",ubic:"The stage will be…",
+ q_tarima:"Stage",tarimaH:"Each module is 1.25 × 1.25 m. You can add several.",otraM:"Other size",otraP:"e.g. 8.75 x 3.75",vinil:"Vinyl",color:"Vinyl color",ubic:"The stage will be…",
  q_custom:"Custom project",customH:"Booths, sets and brand pieces.",cTipo:"What do you need?",esp:"Assigned space (meters)",espP:"e.g. 4x8",elem:"What should it include?",estilo:"Style",diseno:"Do you have a design?",
  q_gal:"Which style inspires you?",galH:"Some of our setups.",
  q_pres:"Approximate budget",presH:"It helps us propose the best within your range.",presP:"Amount in lempiras",noDecir:"I'd rather not say",
@@ -333,6 +352,7 @@ inv:["Menos de 50|Under 50","50 a 150|50 to 150","150 a 200|150 to 200","Más de
 nec:[["Audio","Audio|Sound","🔊"],["Iluminación","Iluminación|Lighting","💡"],["Pantallas LED","Pantallas LED|LED screens","🖥️"],["Tarima","Tarima|Stage","🟫"],["DJ o animación","DJ o animación|DJ or host","🎧"],["Planta eléctrica","Planta eléctrica|Power generator","⚡"],["Personal técnico","Personal técnico|Tech crew","🧑‍🔧"],["Proyecto personalizado","Proyecto personalizado|Custom project","🧩"],["Producción completa, asesórenme","Producción completa, asesórenme|Full production, advise me","✨"]],
 personas:["50","100","150","300","500","Más de 500|Over 500"],
 micros:["Ninguno|None","1 a 2|1 to 2","3 a 4|3 to 4","5 o más|5 or more"],
+usos:["Voz y conferencias|Speech and talks","Música ambiental|Background music","DJ o fiesta|DJ or party","Banda en vivo|Live band","Video con sonido|Video with sound"],
 luces:["Ambiental|Ambient","De escenario|Stage","Show completo|Full show","Asesórenme|Advise me"],
 ledT:{"Pantalla|Screen":["3x2","3.5x2","4x2","4x2.5","5x2.5","5x3","6x3","7x3"],"Totem":["2x1","2.5x1","3x1","3x1.5"],"Arco LED|LED arch":["3x3","5x2.5","5x3"],"Franja|Strip":["2x0.5","2.5x0.5"]},
 tarima:["3.75x2.5","5x2.5","6.25x2.5","7.5x3.75","10x2.5","10x3.75"],
@@ -343,9 +363,9 @@ elem:["Mostrador|Counter","Pantalla|Screen","Iluminación|Lighting","Bodega|Stor
 estilo:["Moderno|Modern","Tecnológico|Tech","Natural|Natural","Elegante|Elegant","Ya tengo diseño|I have a design"],
 diseno:["Sí, lo adjunto|Yes, I'll attach it","Tengo idea, diseñen ustedes|I have an idea, you design","Asesórenme|Advise me"]};
 const PACKS=[
-{id:"conf",ico:"🎤",es:["Conferencia","Audio, pantalla y luz ambiental"],en:["Conference","Sound, screen and ambient light"],set:{tipo:["Corporativo / conferencia"],necesita:["Audio","Iluminación","Pantallas LED"],audio:{personas:"150",micros:"3 a 4"},luces:["Ambiental"],led:[{t:"Pantalla",m:"4x2.5",c:1}]}},
-{id:"lanz",ico:"🚀",es:["Lanzamiento","Tarima, pantalla y luces de escenario"],en:["Launch","Stage, screen and stage lights"],set:{tipo:["Lanzamiento de marca"],necesita:["Audio","Iluminación","Pantallas LED","Tarima"],audio:{personas:"150",micros:"1 a 2"},luces:["De escenario"],led:[{t:"Pantalla",m:"5x3",c:1}],tarima:{medida:"6.25x2.5",otra:"",vinil:"Con vinil",color:"Negro",ubic:"Interior"}}},
-{id:"conc",ico:"🎸",es:["Concierto","Show completo de audio, luz y LED"],en:["Concert","Full sound, light and LED show"],set:{tipo:["Concierto o show"],necesita:["Audio","Iluminación","Pantallas LED","Tarima","Planta eléctrica","Personal técnico"],audio:{personas:"500",micros:"3 a 4"},luces:["Show completo"],led:[{t:"Pantalla",m:"6x3",c:2}],tarima:{medida:"10x3.75",otra:"",vinil:"Con vinil",color:"Negro",ubic:"Exterior"}}},
+{id:"conf",ico:"🎤",es:["Conferencia","Audio, pantalla y luz ambiental"],en:["Conference","Sound, screen and ambient light"],set:{tipo:["Corporativo / conferencia"],necesita:["Audio","Iluminación","Pantallas LED"],audio:{usos:["Voz y conferencias","Video con sonido"],micros:"3 a 4",microsNum:""},luces:["Ambiental"],led:[{t:"Pantalla",m:"4x2.5",c:1}]}},
+{id:"lanz",ico:"🚀",es:["Lanzamiento","Tarima, pantalla y luces de escenario"],en:["Launch","Stage, screen and stage lights"],set:{tipo:["Lanzamiento de marca"],necesita:["Audio","Iluminación","Pantallas LED","Tarima"],audio:{usos:["Voz y conferencias","Música ambiental"],micros:"1 a 2",microsNum:""},luces:["De escenario"],led:[{t:"Pantalla",m:"5x3",c:1}],tarimas:[{m:"6.25x2.5",otra:"",vinil:"Con vinil",color:"Negro",ubic:"Interior",c:1}]}},
+{id:"conc",ico:"🎸",es:["Concierto","Show completo de audio, luz y LED"],en:["Concert","Full sound, light and LED show"],set:{tipo:["Concierto o show"],necesita:["Audio","Iluminación","Pantallas LED","Tarima","Planta eléctrica","Personal técnico"],audio:{usos:["Banda en vivo","DJ o fiesta"],micros:"3 a 4",microsNum:""},luces:["Show completo"],led:[{t:"Pantalla",m:"6x3",c:2}],tarimas:[{m:"10x3.75",otra:"",vinil:"Con vinil",color:"Negro",ubic:"Exterior",c:1}]}},
 {id:"expo",ico:"🧩",es:["Expo o stand","Proyecto a la medida de tu espacio"],en:["Expo or booth","Tailored to your space"],set:{tipo:["Feria o expo"],necesita:["Proyecto personalizado"],custom:{tipo:["Stand de expo"],espacio:"",espacioOtro:"",elementos:[],estilo:[],diseno:""}}},
 {id:"cero",ico:"✏️",es:["Desde cero","Eliges todo tú"],en:["From scratch","You choose everything"],set:{}}];
 const PAISES=[["+504","Honduras","🇭🇳"],["+502","Guatemala","🇬🇹"],["+503","El Salvador","🇸🇻"],["+505","Nicaragua","🇳🇮"],["+506","Costa Rica","🇨🇷"],["+507","Panamá","🇵🇦"],["+52","México","🇲🇽"],["+1","EE. UU. / Canadá","🇺🇸"],["+57","Colombia","🇨🇴"],["+51","Perú","🇵🇪"],["+56","Chile","🇨🇱"],["+54","Argentina","🇦🇷"],["+593","Ecuador","🇪🇨"],["+1 809","Rep. Dominicana","🇩🇴"],["+34","España","🇪🇸"]];
@@ -378,25 +398,27 @@ const lbl=k=>`<p class="sub">${t(k)}</p>`;
 const lblM=k=>`<p class="sub">${t(k)} <em class="multi">· ${t("mult")}</em></p>`;
 const fld=(id,k,val,type,ph,o)=>`<div class="field"><label for="${id}">${t(k)} ${o?`<small>${t("opt")}</small>`:""}</label><input type="${type||"text"}" id="${id}" data-in="${id}" maxlength="150" value="${esc(val)}" ${ph?`placeholder="${esc(ph)}"`:""} ${type==="tel"?'inputmode="tel" autocomplete="tel"':""}${type==="email"?'autocomplete="email"':""}></div>`;
 let LED={t:"Pantalla",m:"",c:1};
+let TAR={m:"",otra:"",vinil:"",color:"",ubic:"",c:1};
+const numIn=(k,v,ph)=>`<input type="number" inputmode="numeric" min="1" data-in="${k}" placeholder="${t(ph)}" value="${esc(v)}" class="numin">`;
 function ok(q){
  const d=A;
  switch(q.id){
  case"contacto":return d.empresa.trim()&&d.nombre.trim()&&d.wa.replace(/\D/g,"").length>=(d.pais==="+504"?8:7)&&(!d.correo||/^\S+@\S+\.\S+$/.test(d.correo));
  case"evento":return d.tipo.length>0;
- case"fecha":return (d.sinFecha||d.fecha)&&(d.sinFecha||d.fechaEstado)&&d.dias&&d.horario.length>0;
+ case"fecha":return (d.sinFecha||d.fecha)&&(d.sinFecha||d.fechaEstado)&&d.dias&&(d.dias!=="4 o más"||Number(d.diasNum)>0)&&d.horario.length>0;
  case"lugar":return d.ciudad&&(d.ciudad!=="Otra ciudad"||d.ciudadOtra.trim())&&d.tipoLugar.length>0;
  case"espacio":return d.tamano&&d.invitados&&(d.invitados!=="Más de 200"||Number(d.invNum)>0);
  case"necesita":return d.necesita.length>0;
- case"audio":return d.audio.personas&&d.audio.micros;
+ case"audio":return d.audio.usos.length>0&&d.audio.micros&&(d.audio.micros!=="5 o más"||Number(d.audio.microsNum)>0);
  case"luces":return d.luces.length>0;
  case"led":return d.led.length>0;
- case"tarima":{const x=d.tarima;return (x.medida&&(x.medida!=="Otra medida"||x.otra.trim()))&&x.vinil&&(x.vinil==="Sin vinil"||x.color)&&x.ubic}
+ case"tarima":return d.tarimas.length>0;
  case"custom":{const c=d.custom;return c.tipo.length>0&&(c.espacio&&(c.espacio!=="Otra medida"||c.espacioOtro.trim()))&&c.diseno}
  case"galeria":return !!d.estilo;
  case"pres":return d.presNoDecir||Number(d.presupuesto)>0;
  default:return true}
 }
-function normal(a){const arr=v=>Array.isArray(v)?v:(v?[v]:[]);["conocio","tipo","horario","tipoLugar","luces"].forEach(k=>a[k]=arr(a[k]));a.custom=Object.assign(nuevo().custom,a.custom);a.custom.tipo=arr(a.custom.tipo);a.custom.estilo=arr(a.custom.estilo);return a}
+function normal(a){const arr=v=>Array.isArray(v)?v:(v?[v]:[]);["conocio","tipo","horario","tipoLugar","luces"].forEach(k=>a[k]=arr(a[k]));a.custom=Object.assign(nuevo().custom,a.custom);a.audio=Object.assign(nuevo().audio,a.audio);if(!Array.isArray(a.audio.usos))a.audio.usos=[];if(!Array.isArray(a.tarimas))a.tarimas=[];a.custom.tipo=arr(a.custom.tipo);a.custom.estilo=arr(a.custom.estilo);return a}
 function guardarLS(){try{const c=Object.assign({},A,{archivos:[]});localStorage.setItem(LS,JSON.stringify({A:c,id:Q[i].id,lang:LANG,ts:Date.now()}))}catch(e){}}
 function leerLS(){try{const s=JSON.parse(localStorage.getItem(LS)||"null");if(s&&Date.now()-s.ts<1000*60*60*24*30&&s.A&&s.A.empresa!==undefined)return s}catch(e){}return null}
 function misSol(){try{return JSON.parse(localStorage.getItem(LS_MIS)||"[]")}catch(e){return[]}}
@@ -404,20 +426,24 @@ function cuerpo(q){
  const d=A;
  if(q.id==="contacto") return `<div class="grid2">${fld("emp","emp",d.empresa)}${fld("nom","nom",d.nombre)}<div class="field"><label for="wa">${t("wa")}</label><div class="telrow"><select id="pais" data-in="pais" aria-label="${t("pais")}">${PAISES.map(([c,n,f])=>`<option value="${c}" ${d.pais===c?"selected":""}>${f} ${c}</option>`).join("")}</select><input type="tel" id="wa" data-in="wa" maxlength="20" inputmode="tel" autocomplete="tel-national" value="${esc(d.wa)}" placeholder="${d.pais==="+504"?"9999-9999":""}"></div></div>${fld("correo","correo",d.correo,"email","nombre@empresa.com",1)}</div>${lblM("conocio")}${chN("conocio",O.conocio)}`;
  if(q.id==="evento") return chN("tipo",O.tipo);
- if(q.id==="fecha") return `${lbl("fecha")}<div class="grid2"><input type="date" data-in="fecha" value="${esc(d.fecha)}" ${d.sinFecha?"disabled":""} min="${new Date().toISOString().slice(0,10)}"><div class="chips"><button class="chip ask" data-flag="sinFecha" aria-pressed="${d.sinFecha}">${t("sinFecha")}</button></div></div>${d.sinFecha?"":lbl("fEst")+ch1("fechaEstado",O.fEst)}${lbl("dias")}${ch1("dias",O.dias)}${lblM("horario")}${chN("horario",O.horario)}`;
+ if(q.id==="fecha") return `${lbl("fecha")}<div class="grid2"><input type="date" data-in="fecha" value="${esc(d.fecha)}" ${d.sinFecha?"disabled":""} min="${new Date().toISOString().slice(0,10)}"><div class="chips"><button class="chip ask" data-flag="sinFecha" aria-pressed="${d.sinFecha}">${t("sinFecha")}</button></div></div>${d.sinFecha?"":lbl("fEst")+ch1("fechaEstado",O.fEst)}${lbl("dias")}${ch1("dias",O.dias)}${d.dias==="4 o más"?numIn("diasNum",d.diasNum,"diasP"):""}${lblM("horario")}${chN("horario",O.horario)}`;
  if(q.id==="lugar") return `${lbl("ciudad")}${ch1("ciudad",O.ciudad)}${d.ciudad==="Otra ciudad"?fld("ciudadOtra","cOtra",d.ciudadOtra):""}${lblM("tLugar")}${chN("tipoLugar",O.tLugar)}${fld("lugar","lugar",d.lugar,"text","",1)}`;
  if(q.id==="espacio") return `${lbl("tam")}${ch1("tamano",O.tam,1)}${lbl("inv")}${ch1("invitados",O.inv)}${d.invitados==="Más de 200"?`<input type="number" inputmode="numeric" min="201" step="10" data-in="invNum" placeholder="${t("invP")}" value="${esc(d.invNum)}">`:""}`;
  if(q.id==="necesita") return `<div class="need">${O.nec.map(([v,l,ic])=>`<button class="pack" data-tk="necesita" data-v="${esc(v)}" aria-pressed="${tiene(v)}"><span class="ico">${ic}</span><b>${esc(L(l))}</b></button>`).join("")}</div>`;
- if(q.id==="audio") return `${ch1("audio.personas",O.personas)}${lbl("micros")}${ch1("audio.micros",O.micros)}`;
+ if(q.id==="audio") return `${lblM("usos")}${chN("audio.usos",O.usos)}${lbl("micros")}${ch1("audio.micros",O.micros)}${d.audio.micros==="5 o más"?numIn("microsNum",d.audio.microsNum,"cuantos"):""}`;
  if(q.id==="luces") return chN("luces",O.luces);
  if(q.id==="led"){const tipos=Object.keys(O.ledT),key=tipos.find(k=>V(k)===LED.t);
-  return `${lbl("tipoLed")}<div class="chips">${tipos.map(k=>`<button class="chip" data-led-t="${V(k)}" aria-pressed="${V(k)===LED.t}">${esc(L(k))}</button>`).join("")}</div>
-  ${lbl("medida")}<div class="chips">${O.ledT[key].map(m=>`<button class="chip" data-led-m="${m}" aria-pressed="${LED.m===m}">${m}</button>`).join("")}<button class="chip ask" data-led-m="ase" aria-pressed="${LED.m==="ase"}">${LANG==="en"?"Not sure, advise me":"No sé, asesórenme"}</button></div>
-  ${lbl("cant")}<div class="stepper"><button data-led-c="-1" aria-label="-">−</button><output>${LED.c}</output><button data-led-c="1" aria-label="+">+</button><button class="btn" data-led-add>＋ ${t("agregar")}</button></div>
+  return `<div class="picker"><div class="pk-a">${lbl("tipoLed")}<div class="chips">${tipos.map(k=>`<button class="chip" data-led-t="${V(k)}" aria-pressed="${V(k)===LED.t}">${esc(L(k))}</button>`).join("")}</div>
+  ${lbl("medida")}<div class="chips">${O.ledT[key].map(m=>`<button class="chip" data-led-m="${m}" aria-pressed="${LED.m===m}">${m}</button>`).join("")}<button class="chip ask" data-led-m="ase" aria-pressed="${LED.m==="ase"}">${LANG==="en"?"Not sure, advise me":"No sé, asesórenme"}</button></div></div>
+  <div class="pk-b">${lbl("cant")}<div class="stepper"><button data-led-c="-1" aria-label="-">−</button><output>${LED.c}</output><button data-led-c="1" aria-label="+">+</button><button class="btn add" data-led-add>＋ ${t("agregar")}</button></div>
   <p class="errmsg" id="ledErr"></p>
-  <div class="items">${d.led.length?d.led.map((x,k)=>`<div class="item">✓ ${x.c} × ${esc(L(tipos.find(z=>V(z)===x.t)||x.t))} ${x.m==="ase"?"("+t("sugerir")+")":x.m+" m"}<button data-led-x="${k}" aria-label="Quitar">×</button></div>`).join(""):`<span class="vacio">${t("ledVacio")}</span>`}</div>`}
- if(q.id==="tarima"){const x=d.tarima;return `${lbl("medida")}<div class="chips">${O.tarima.map(m=>`<button class="chip" data-k="tarima.medida" data-v="${m}" aria-pressed="${x.medida===m}">${m}</button>`).join("")}<button class="chip" data-k="tarima.medida" data-v="Otra medida" aria-pressed="${x.medida==="Otra medida"}">${t("otraM")}</button><button class="chip ask" data-k="tarima.medida" data-v="Asesórenme" aria-pressed="${x.medida==="Asesórenme"}">${LANG==="en"?"Not sure, advise me":"No sé, asesórenme"}</button></div>
-  ${x.medida==="Otra medida"?`<input type="text" data-in="tarimaOtra" maxlength="40" placeholder="${t("otraP")}" value="${esc(x.otra)}">`:""}${lbl("vinil")}${ch1("tarima.vinil",O.vinil)}${x.vinil==="Con vinil"?lbl("color")+ch1("tarima.color",O.color):""}${lbl("ubic")}${ch1("tarima.ubic",O.ubic)}`}
+  <div class="items">${d.led.length?d.led.map((x,k)=>`<span class="item">${x.c} × ${esc(L(tipos.find(z=>V(z)===x.t)||x.t))} ${x.m==="ase"?"("+t("sugerir")+")":x.m+" m"}<button data-led-x="${k}" aria-label="Quitar">×</button></span>`).join(""):`<span class="vacio">${t("ledVacio")}</span>`}</div></div></div>`}
+ if(q.id==="tarima"){const x=TAR,ase=LANG==="en"?"Not sure, advise me":"No sé, asesórenme",c1=(k,opts)=>`<div class="chips">${opts.map(o=>`<button class="chip" data-tar="${k}" data-v="${esc(V(o))}" aria-pressed="${x[k]===V(o)}">${esc(L(o))}</button>`).join("")}</div>`;
+  return `<div class="picker"><div class="pk-a">${lbl("medida")}<div class="chips">${O.tarima.map(m=>`<button class="chip" data-tar="m" data-v="${m}" aria-pressed="${x.m===m}">${m}</button>`).join("")}<button class="chip" data-tar="m" data-v="Otra medida" aria-pressed="${x.m==="Otra medida"}">${t("otraM")}</button><button class="chip ask" data-tar="m" data-v="Asesórenme" aria-pressed="${x.m==="Asesórenme"}">${ase}</button></div>
+  ${x.m==="Otra medida"?`<input type="text" data-in="tarimaOtra" maxlength="40" placeholder="${t("otraP")}" value="${esc(x.otra)}">`:""}${lbl("vinil")}${c1("vinil",O.vinil)}${x.vinil==="Con vinil"?lbl("color")+c1("color",O.color):""}${lbl("ubic")}${c1("ubic",O.ubic)}</div>
+  <div class="pk-b">${lbl("cant")}<div class="stepper"><button data-tar-c="-1" aria-label="-">−</button><output>${x.c}</output><button data-tar-c="1" aria-label="+">+</button><button class="btn add" data-tar-add>＋ ${t("agregar")}</button></div>
+  <p class="errmsg" id="tarErr"></p>
+  <div class="items">${d.tarimas.length?d.tarimas.map((y,k)=>`<span class="item">${esc(textoTar(y))}<button data-tar-x="${k}" aria-label="Quitar">×</button></span>`).join(""):`<span class="vacio">${t("tarVacio")}</span>`}</div></div></div>`}
  if(q.id==="custom"){const c=d.custom;return `${lblM("cTipo")}${chN("custom.tipo",O.cTipo)}${lbl("esp")}<div class="chips">${O.esp.map(o=>`<button class="chip" data-k="custom.espacio" data-v="${esc(V(o))}" aria-pressed="${c.espacio===V(o)}">${esc(L(o))}</button>`).join("")}<button class="chip" data-k="custom.espacio" data-v="Otra medida" aria-pressed="${c.espacio==="Otra medida"}">${t("otraM")}</button></div>
   ${c.espacio==="Otra medida"?`<input type="text" data-in="espOtro" maxlength="40" placeholder="${t("espP")}" value="${esc(c.espacioOtro)}">`:""}${lblM("elem")}${chN("custom.elementos",O.elem)}${lblM("estilo")}${chN("custom.estilo",O.estilo)}${lbl("diseno")}${ch1("custom.diseno",O.diseno,1)}`}
  if(q.id==="galeria") return `<div class="gal">${GALERIA.map(g=>`<button data-k="estilo" data-v="${esc(g.es)}" aria-pressed="${d.estilo===g.es}"><img src="${esc(g.src)}" alt=""><span>${esc(LANG==="en"?g.en:g.es)}</span></button>`).join("")}</div>`;
@@ -428,17 +454,18 @@ function cuerpo(q){
  if(q.id==="resumen") return `<div class="resumen">${resumen().map(r=>`<div class="rs"><header><b>${t(r[0])}</b><button data-edit="${r[1]}">${t("edit")}</button></header>${r[2].filter(x=>x[1]).map(x=>`<p><span>${esc(x[0])}:</span> ${esc(x[1])}</p>`).join("")}</div>`).join("")}</div><p class="errmsg" id="err" role="alert"></p>`;
  return "";
 }
+function textoTar(y){const en=LANG==="en",tr1=v=>{for(const k of ["vinil","color","ubic"])for(const o of O[k])if(V(o)===v)return L(o);return v};return `${y.c} × ${en?"Stage":"Tarima"} ${y.m==="Otra medida"?y.otra:y.m==="Asesórenme"?(en?"(size to suggest)":"(medida a sugerir)"):y.m+" m"} · ${[tr1(y.vinil),y.vinil==="Con vinil"?tr1(y.color):"",tr1(y.ubic)].filter(Boolean).join(" · ")}`}
 function textoLed(x){return `${x.c} × ${x.t} ${x.m==="ase"?"(medida a sugerir)":x.m+" m"}`}
 function resumen(){const d=A,es=LANG!=="en";const tr=v=>{if(Array.isArray(v))return v.map(tr).join(", ");if(!v)return"";for(const k in O){const arr=Array.isArray(O[k])?O[k]:Object.keys(O[k]);for(const o of arr){const s=Array.isArray(o)?o[1]:o;if(V(s)===v)return L(s)}}return v};
  const r=[["r_contacto","contacto",[[t("emp"),d.empresa],[t("nom"),d.nombre],[t("wa"),(d.pais||"+504")+" "+d.wa],[t("correo"),d.correo],[t("conocio"),tr(d.conocio)]]],
- ["r_evento","evento",[[es?"Tipo":"Type",tr(d.tipo)],[t("fecha"),d.sinFecha?t("tbd"):d.fecha.split("-").reverse().join("/")+" · "+tr(d.fechaEstado)],[t("dias"),tr(d.dias)],[t("horario"),tr(d.horario)]]],
+ ["r_evento","evento",[[es?"Tipo":"Type",tr(d.tipo)],[t("fecha"),d.sinFecha?t("tbd"):d.fecha.split("-").reverse().join("/")+" · "+tr(d.fechaEstado)],[t("dias"),d.dias==="4 o más"&&d.diasNum?d.diasNum+(es?" días":" days"):tr(d.dias)],[t("horario"),tr(d.horario)]]],
  ["r_lugar","lugar",[[t("ciudad"),d.ciudad==="Otra ciudad"?d.ciudadOtra:d.ciudad],[t("tLugar"),tr(d.tipoLugar)],[t("tam"),tr(d.tamano)],[t("inv"),d.invitados==="Más de 200"&&d.invNum?d.invNum+(es?" personas":" people"):tr(d.invitados)],[t("lugar"),d.lugar]]],
  ["r_eq","necesita",[[es?"Necesita":"Needs",d.necesita.map(tr).join(", ")]]]];
  const eq=r[3][2];
- if(tiene("Audio")) eq.push([t("q_audio"),tr(d.audio.personas)+(es?" personas":" people")+" · "+t("micros")+": "+tr(d.audio.micros)]);
+ if(tiene("Audio")) eq.push([t("q_audio"),tr(d.audio.usos)+" · "+t("micros")+": "+(d.audio.micros==="5 o más"&&d.audio.microsNum?d.audio.microsNum:tr(d.audio.micros))]);
  if(tiene("Iluminación")) eq.push([t("q_luces"),tr(d.luces)]);
  if(tiene("Pantallas LED")) eq.push([t("q_led"),d.led.map(textoLed).join(" · ")]);
- if(tiene("Tarima")){const x=d.tarima;eq.push([t("q_tarima"),[x.medida==="Otra medida"?x.otra:tr(x.medida),tr(x.vinil),x.vinil==="Con vinil"?tr(x.color):"",tr(x.ubic)].filter(Boolean).join(" · ")])}
+ if(tiene("Tarima")) eq.push([t("q_tarima"),d.tarimas.map(textoTar).join(" | ")]);
  if(tiene("Proyecto personalizado")){const c=d.custom;eq.push([t("q_custom"),[tr(c.tipo),c.espacio==="Otra medida"?c.espacioOtro:tr(c.espacio),c.elementos.map(tr).join(", "),tr(c.estilo),tr(c.diseno)].filter(Boolean).join(" · ")])}
  if(d.estilo) eq.push([t("estilo"),d.estilo]);
  r.push(["r_cierre","pres",[[t("q_pres"),d.presNoDecir?t("noDecir"):"L "+Number(d.presupuesto||0).toLocaleString("es-HN")],[es?"Comentarios":"Comments",d.comentarios],[es?"Archivos":"Files",d.archivos.map(f=>f.name).join(", ")]]]);
@@ -485,6 +512,8 @@ function enviar(b){if(enviando)return;enviando=true;b.disabled=true;b.textConten
  const body=Object.assign({accion:"cotizacion",id:ID_ENVIO,lang:LANG,resumen:det,ledTexto:A.led.map(textoLed).join(" · ")},A);
  body.wa=(A.pais||"+504")+" "+A.wa;
  if(A.invitados==="Más de 200"&&A.invNum)body.invitados=A.invNum+" personas";
+ if(A.dias==="4 o más"&&A.diasNum)body.dias=A.diasNum+" días";
+ body.tarima=A.tarimas;
  ["tipo","horario","tipoLugar","conocio"].forEach(k=>{if(Array.isArray(body[k]))body[k]=body[k].join(", ")});
  if(DEMO){setTimeout(()=>fin({ok:true,num:"SOL-DEMO",k:"demo"}),900);return}
  fetch(URL_APP,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(body)}).then(r=>r.json()).then(j=>j&&j.ok?fin(j):fail(j&&j.error)).catch(()=>fail())}
@@ -503,6 +532,7 @@ function cargarSeg(){const num=PRM.get("seg")||"",k=PRM.get("k")||"";
   const pasos=[["st1","st1s"],["st2","st2s"],["st3","st3s"]].concat(est==="Ganada"?[["st4","st4s"]]:[]);
   $("#main").innerHTML=`<section class="card enter"><span class="eyebrow">${t("segEye")}</span><div class="folio">${esc(num)}</div><p class="lead">${esc(s.empresa||"")}${s.evento?" · "+esc(s.evento):""}</p>
   <div class="track">${pasos.map((p,k)=>`<div class="tk ${k+1<n||(k+1===n&&n===4)?"ok":k+1===n?"ya ok":""}"><i>${k+1<=n?"✓":k+1}</i><div><b>${t(p[0])}</b><small>${t(p[1])}</small></div></div>`).join("")}</div>
+  ${s.cotizacion?`<nav class="ctrl"><a class="btn primary" target="_blank" rel="noopener" style="text-decoration:none;text-align:center" href="${esc(s.cotizacion)}">${t("verCot")} →</a></nav>`:""}
   <button class="skip" data-nueva>${t("nueva")}</button></section>`};
  if(DEMO){pinta({estado:"En proceso",empresa:"Demo"});return}
  fetch(URL_APP,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({accion:"cotSeguimiento",num,k})}).then(r=>r.json())
@@ -520,6 +550,10 @@ document.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)r
  if(b.dataset.ledM){LED.m=b.dataset.ledM;render();return}
  if(b.dataset.ledC){LED.c=Math.max(1,Math.min(20,LED.c+ +b.dataset.ledC));render();return}
  if(b.hasAttribute("data-led-add")){if(!LED.m){$("#ledErr").textContent=t("ledErr");return}A.led.push({t:LED.t,m:LED.m,c:LED.c});LED={t:LED.t,m:"",c:1};render();guardarLS();return}
+ if(b.dataset.tar){TAR[b.dataset.tar]=b.dataset.v;if(b.dataset.tar==="vinil"&&b.dataset.v==="Sin vinil")TAR.color="";render();return}
+ if(b.dataset.tarC){TAR.c=Math.max(1,Math.min(20,TAR.c+ +b.dataset.tarC));render();return}
+ if(b.hasAttribute("data-tar-add")){const x=TAR;if(!(x.m&&(x.m!=="Otra medida"||x.otra.trim())&&x.vinil&&(x.vinil==="Sin vinil"||x.color)&&x.ubic)){$("#tarErr").textContent=t("tarErr");return}A.tarimas.push(Object.assign({},x));TAR={m:"",otra:"",vinil:"",color:"",ubic:"",c:1};render();guardarLS();return}
+ if(b.dataset.tarX){A.tarimas.splice(+b.dataset.tarX,1);render();guardarLS();return}
  if(b.dataset.ledX){A.led.splice(+b.dataset.ledX,1);render();guardarLS();return}
  if(b.dataset.adjX){A.archivos.splice(+b.dataset.adjX,1);render();return}
  if(b.dataset.edit){i=Q.findIndex(x=>x.id===b.dataset.edit);render();window.scrollTo({top:0});return}
@@ -528,7 +562,7 @@ document.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)r
 });
 document.addEventListener("input",e=>{const el=e.target,k=el.dataset&&el.dataset.in;if(!k)return;const v=el.value;
  const map={invNum:"invNum",pais:"pais",emp:"empresa",nom:"nombre",wa:"wa",correo:"correo",ciudadOtra:"ciudadOtra",lugar:"lugar",fecha:"fecha",pres:"presupuesto",com:"comentarios"};
- if(map[k])A[map[k]]=map[k]==="correo"?v.trim():v;if(k==="tarimaOtra")A.tarima.otra=v;if(k==="espOtro")A.custom.espacioOtro=v;refresh()});
+ if(map[k])A[map[k]]=map[k]==="correo"?v.trim():v;if(k==="tarimaOtra")TAR.otra=v;if(k==="diasNum")A.diasNum=v;if(k==="microsNum")A.audio.microsNum=v;if(k==="espOtro")A.custom.espacioOtro=v;refresh()});
 document.addEventListener("change",e=>{if(e.target.id!=="files")return;const er=$("#adjErr");er.textContent="";
  [...e.target.files].forEach(f=>{if(A.archivos.length>=3)return;if(f.size>5*1024*1024){er.textContent=t("adjErr");return}
   const r=new FileReader();r.onload=()=>{A.archivos.push({name:f.name.slice(0,120),type:f.type,data:String(r.result).split(",")[1]});render()};r.readAsDataURL(f)})});
@@ -544,6 +578,8 @@ function draw(tm){cx.clearRect(0,0,W,H);for(const c of cubes){if(!still){c.y-=c.
  if(!still||parts.length)requestAnimationFrame(draw)}
 requestAnimationFrame(draw);
 function confetti(){if(still)return;const cols=["#ee4b22","#7c5cd6","#f5a524","#4fd6a3"],d=devicePixelRatio;for(let k=0;k<140;k++)parts.push({x:W/2,y:H*.35,vx:(Math.random()-.5)*16*d,vy:(-Math.random()*12-4)*d,a:Math.random()*6,va:(Math.random()-.5)*.3,w:(6+Math.random()*6)*d,h:(3+Math.random()*4)*d,c:cols[k%4]})}
+// Solo se anima la tarjeta al cambiar de paso (no en cada toque)
+let PREV=-1;const _render=render;render=function(){_render();const c=document.querySelector("#main .card");if(c&&i===PREV)c.classList.remove("enter");PREV=i};
 if(PRM.get("seg")){i=Q.findIndex(x=>x.type==="seg")}
 render();
 </script>
