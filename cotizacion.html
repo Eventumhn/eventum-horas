@@ -259,7 +259,7 @@ let A=nuevo(), i=0, LANG=(PRM.get("lang")||(navigator.language||"es")).slice(0,2
 function nuevo(){return{paquete:"",empresa:"",nombre:"",wa:"",correo:"",conocio:"",tipo:"",fecha:"",sinFecha:false,fechaEstado:"",dias:"",horario:"",ciudad:"",ciudadOtra:"",lugar:"",tipoLugar:"",tamano:"",invitados:"",necesita:[],audio:{personas:"",micros:""},luces:"",led:[],tarima:{medida:"",otra:"",vinil:"",color:"",ubic:""},custom:{tipo:"",espacio:"",espacioOtro:"",elementos:[],estilo:"",diseno:""},estilo:"",presupuesto:"",presNoDecir:false,comentarios:"",archivos:[]}}
 // Textos ES | EN. Las opciones se guardan en español (la parte antes de "|").
 const TX={
-es:{start:"Empezar",cont:"Continuar donde quedaste",next:"Siguiente",back:"Atrás",send:"Enviar solicitud",sending:"Enviando…",edit:"Editar",of:"de",
+es:{start:"Empezar",cont:"Continuar donde quedaste",next:"Siguiente",back:"Atrás",send:"Enviar solicitud",sending:"Enviando…",cargando:"Cargando…",edit:"Editar",of:"de",
  eye:"Solicitud de cotización",h1:"Cuéntanos de tu evento",lead:"Tocas, eliges y listo. Con esto nuestro equipo arma una propuesta a tu medida.",pill1:"👆 Solo tocar",pill2:"⚡ Respuesta en menos de 24 h",pill3:"💾 Se guarda solo",
  packT:"¿Quieres empezar con un paquete?",packH:"Viene con equipo sugerido que puedes cambiar.",retoma:"Tienes una solicitud a medias.",misT:"Tus solicitudes enviadas",ver:"Ver estado",
  s_contacto:"Contacto",s_evento:"Tu evento",s_lugar:"Lugar",s_necesita:"Lo que necesitas",s_detalle:"Detalles",s_cierre:"Para terminar",
@@ -280,7 +280,7 @@ es:{start:"Empezar",cont:"Continuar donde quedaste",next:"Siguiente",back:"Atrá
  okEye:"Solicitud recibida",okH:"¡Gracias! Ya estamos en ello",okLead:"Tu número de solicitud es:",okNote:"Te contactamos por WhatsApp en menos de 24 horas hábiles.",okMail:"También te enviamos la confirmación a tu correo.",okSeg:"Sigue el estado de tu solicitud aquí:",copiar:"Copiar enlace",copiado:"Enlace copiado",nueva:"Hacer otra solicitud",
  segEye:"Estado de tu solicitud",st1:"Recibida",st1s:"Ya la tiene nuestro equipo",st2:"En preparación",st2s:"Estamos armando tu propuesta",st3:"Cotización enviada",st3s:"Revisa tu WhatsApp o correo",st4:"¡Evento confirmado!",st4s:"Nos vemos en tu evento",segErr:"No encontramos esa solicitud.",
  r_contacto:"Contacto",r_evento:"Evento",r_lugar:"Lugar",r_eq:"Equipo",r_cierre:"Presupuesto y comentarios",siguenos:"Síguenos y conoce nuestros montajes",foot:"NOVA BTL S de RL · Eventum · Honduras",tbd:"Por definir"},
-en:{start:"Start",cont:"Continue where you left off",next:"Next",back:"Back",send:"Send request",sending:"Sending…",edit:"Edit",of:"of",
+en:{start:"Start",cont:"Continue where you left off",next:"Next",back:"Back",send:"Send request",sending:"Sending…",cargando:"Loading…",edit:"Edit",of:"of",
  eye:"Quote request",h1:"Tell us about your event",lead:"Tap, choose, done. Our team will build a proposal made for you.",pill1:"👆 Just tap",pill2:"⚡ Reply within 24 h",pill3:"💾 Auto-saved",
  packT:"Start with a package?",packH:"It comes with suggested equipment you can change.",retoma:"You have an unfinished request.",misT:"Your sent requests",ver:"See status",
  s_contacto:"Contact",s_evento:"Your event",s_lugar:"Venue",s_necesita:"What you need",s_detalle:"Details",s_cierre:"Wrap up",
@@ -439,7 +439,7 @@ function render(){
   <div class="packs">${PACKS.map(p=>`<button class="pack" data-pack="${p.id}" aria-pressed="${A.paquete===p.id}"><span class="ico">${p.ico}</span><b>${p[LANG][0]}</b><small>${p[LANG][1]}</small></button>`).join("")}</div>
   <nav class="ctrl"><button class="btn primary" data-go="1" id="next">${t("start")}</button></nav></section>`;return}
  if(q.type==="fin"){m.innerHTML=finHTML();return}
- if(q.type==="seg"){m.innerHTML=`<section class="card enter"><span class="eyebrow">${t("segEye")}</span><h2>${t("sending")}</h2></section>`;cargarSeg();return}
+ if(q.type==="seg"){m.innerHTML=`<section class="card enter"><span class="eyebrow">${t("segEye")}</span><h2>${t("cargando")}</h2></section>`;cargarSeg();return}
  const vs=vis(),last=vs[vs.length-1]===q;
  m.innerHTML=`<section class="card enter"><span class="eyebrow">${t(q.sec)}</span><h2>${t(q.title)}</h2>${q.hint?`<p class="hint">${t(q.hint)}</p>`:""}
  ${cuerpo(q)}
