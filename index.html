@@ -124,6 +124,14 @@
     if (t === 'recUser' && ev.data.n && ev.data.p) { try { localStorage.setItem('ehRecUser', JSON.stringify({ n: ev.data.n, p: ev.data.p })); } catch (e) {} }
     if (t === 'olvUser') { try { localStorage.removeItem('ehRecUser'); } catch (e) {} }
     if (t === 'appLista') { try { var u = JSON.parse(localStorage.getItem('ehRecUser') || 'null'); if (u && u.n && u.p) ev.source.postMessage({ tipo: 'recUser', n: u.n, p: u.p }, ev.origin); } catch (e) {} }
+    // Identificador del teléfono (para "un teléfono por persona"): se guarda aquí, donde el navegador no lo borra
+    if (t === 'appLista') { try {
+      var dv = localStorage.getItem('ehDev') || '', suyo = String(ev.data.dev || '').replace(/[^\w-]/g, '');
+      if (!dv && suyo.length >= 16) dv = suyo;
+      if (!dv) dv = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : (Date.now().toString(36) + Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2));
+      localStorage.setItem('ehDev', dv);
+      ev.source.postMessage({ tipo: 'dev', id: dv }, ev.origin);
+    } catch (e) {} }
   });
 
   var FRASES_C = ['Preparando tu app…', 'Cargando tus eventos…', 'Revisando tus horas…', 'Poniendo todo en orden…', 'Casi listo…'], fraseT;
