@@ -123,6 +123,8 @@
     // Recordarme en este celular: se guarda en la app instalada (el navegador puede borrar lo que guarda la página de Google)
     if (t === 'recUser' && ev.data.n && ev.data.p) { try { localStorage.setItem('ehRecUser', JSON.stringify({ n: ev.data.n, p: ev.data.p })); } catch (e) {} }
     if (t === 'olvUser') { try { localStorage.removeItem('ehRecUser'); } catch (e) {} }
+    // Compartir un archivo (comprobante) por WhatsApp: se hace aquí, en la app instalada, porque dentro de Google no se permite compartir archivos.
+    if (t === 'compartir' && ev.data.b64) compartirArchivo(ev.data);
     if (t === 'appLista') { try { var u = JSON.parse(localStorage.getItem('ehRecUser') || 'null'); if (u && u.n && u.p) ev.source.postMessage({ tipo: 'recUser', n: u.n, p: u.p }, ev.origin); } catch (e) {} }
     // Identificador del teléfono (para "un teléfono por persona"): se guarda aquí, donde el navegador no lo borra
     if (t === 'appLista') { try {
@@ -133,6 +135,27 @@
       ev.source.postMessage({ tipo: 'dev', id: dv }, ev.origin);
     } catch (e) {} }
   });
+
+  function compartirArchivo(d) {
+    var bin = atob(d.b64), u = new Uint8Array(bin.length); for (var k = 0; k < bin.length; k++) u[k] = bin.charCodeAt(k);
+    var f = new File([u], d.nombre || 'comprobante', { type: d.mime || 'application/octet-stream' });
+    var ov = document.createElement('div');
+    ov.style.cssText = 'position:fixed;inset:0;z-index:99;background:rgba(5,4,12,.72);display:flex;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif';
+    ov.innerHTML = '<div style="background:#1c1834;color:#f5f3fb;border-radius:18px;padding:20px;max-width:360px;width:100%;display:flex;flex-direction:column;gap:10px;box-shadow:0 10px 40px rgba(0,0,0,.5)">'
+      + '<b style="font-size:17px">Comprobante listo</b><span style="font-size:14px;opacity:.85">Para ' + String(d.para || '').replace(/[<>&]/g, '') + '</span>'
+      + '<button id="shOk" style="border:0;border-radius:12px;padding:13px;font-weight:700;font-size:15px;background:#25d366;color:#08210f">Compartir por WhatsApp</button>'
+      + '<button id="shNo" style="border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:11px;background:transparent;color:#f5f3fb;font-size:14px">Cancelar</button></div>';
+    document.body.appendChild(ov);
+    ov.querySelector('#shNo').onclick = function () { ov.remove(); };
+    ov.querySelector('#shOk').onclick = function () {
+      ov.remove();
+      if (navigator.canShare && navigator.canShare({ files: [f] })) { navigator.share({ files: [f], text: d.texto || '' }).catch(function () {}); return; }
+      // Sin compartir archivos (computadora): se descarga el comprobante y se abre el chat con el mensaje.
+      var url = URL.createObjectURL(f), a = document.createElement('a'); a.href = url; a.download = f.name; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 60000);
+      if (d.wa) window.open(d.wa, '_blank');
+    };
+  }
 
   var FRASES_C = ['Preparando tu app…', 'Cargando tus eventos…', 'Revisando tus horas…', 'Poniendo todo en orden…', 'Casi listo…'], fraseT;
   function frases() {
